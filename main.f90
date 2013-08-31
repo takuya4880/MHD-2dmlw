@@ -4,6 +4,7 @@ program main
     
     type(cell),pointer :: box
     double precision :: t, tint, tend, tnxt
+    double precision :: uboundary(9,2)
 
     allocate(box)
 
@@ -27,15 +28,15 @@ program main
     tnxt = tint
     tend = 20.
 
-    call initial(box)
-    call boundary(box)
+    call initial(box, uboundary)
+    call boundary(box, uboundary)
     call output(box)
     call pressure(box)
 
     do
         call detdt(box)    
         call step(box)
-        call boundary(box)
+        call boundary(box, uboundary)
         t = t + box%con%dt
         print *, t, box%con%dt
         if (t>=tnxt) then
