@@ -25,7 +25,7 @@ program main
     t = 0.
     tint = -1.
     tnxt = tint
-    tend = 30.
+    tend = 20.
 
     call initial(box)
     call boundary(box)
