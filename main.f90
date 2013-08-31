@@ -23,7 +23,7 @@ program main
     box%con%gam = 1.05
 
     t = 0.
-    tint = -1.
+    tint = 1.
     tnxt = tint
     tend = 20.
 
