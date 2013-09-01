@@ -7,22 +7,22 @@ subroutine artvis(box, f)
     ddx = box%con%dt / box%con%dx
     ddy = box%con%dt / box%con%dy
 
-    call eachav(box%ro,f%ro,box%con,ddx,ddy)
-    call eachav(box%rovx,f%rovx,box%con,ddx,ddy)
-    call eachav(box%rovy,f%rovy,box%con,ddx,ddy)
-    call eachav(box%rovz,f%rovz,box%con,ddx,ddy)
-    call eachav(box%bx,f%bx,box%con,ddx,ddy)
-    call eachav(box%by,f%by,box%con,ddx,ddy)
-    call eachav(box%bz,f%bz,box%con,ddx,ddy)
-    call eachav(box%e,f%e,box%con,ddx,ddy)
+    call eachav(box%ro,f%ro,f%ro,box%con,ddx,ddy)
+    call eachav(box%rovx,f%rovx,f%ro,box%con,ddx,ddy)
+    call eachav(box%rovy,f%rovy,f%ro,box%con,ddx,ddy)
+    call eachav(box%rovz,f%rovz,f%ro,box%con,ddx,ddy)
+    call eachav(box%bx,f%bx,f%ro,box%con,ddx,ddy)
+    call eachav(box%by,f%by,f%ro,box%con,ddx,ddy)
+    call eachav(box%bz,f%bz,f%ro,box%con,ddx,ddy)
+    call eachav(box%e,f%e,f%ro,box%con,ddx,ddy)
     
 
 end subroutine
 !contains    
-subroutine eachav(box,f,con,ddx,ddy)
+subroutine eachav(box,f,ro,con,ddx,ddy)
     use defstruct
     implicit none
-    double precision :: box(ix,iy),f(ix,iy)
+    double precision :: box(ix,iy),f(ix,iy),ro(ix,iy)
     type(constants) :: con
     double precision :: ddx,ddy
 
@@ -33,13 +33,13 @@ subroutine eachav(box,f,con,ddx,ddy)
         do i=3,ix-2
 
             difx1 = f(i+1,j) - f(i,j)
-            kapx1 = con%q * abs(difx1)
+            kapx1 = con%q * abs(difx1) / ro(i,j)
             difx2 = f(i,j) - f(i-1,j)
-            kapx2 = con%q * abs(difx2)
+            kapx2 = con%q * abs(difx2) / ro(i,j)
             dify1 = f(i,j+1) - f(i,j)
-            kapy1 = con%q * abs(dify1)
+            kapy1 = con%q * abs(dify1) / ro(i,j)
             dify2 = f(i,j) - f(i,j-1)
-            kapy2 = con%q * abs(dify2)
+            kapy2 = con%q * abs(dify2) / ro(i,j)
 
             box(i,j) = f(i,j) + ddx*(kapx1*difx1-kapx2*difx2) &
                               + ddy*(kapy1*dify1-kapy2*dify2)
