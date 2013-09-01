@@ -17,7 +17,7 @@ subroutine initial(box)
     forall(i=1:iy) box%y(i)=con%dy*(i-con%marg-0.5)
     
     box%con%gx = 0.
-    box%con%gx = -1./box%con%gam
+    box%con%gx = 0.
     box%con%gy = -1./box%con%gam
     box%con%gz = 0.
 
