@@ -24,7 +24,6 @@ subroutine step(box)
     call lw2(box, h, f, fx, fy, s)
 
     call artvis(box, f)
-    box=f
     call pressure(box)
 
     deallocate(fx, fy, s, h, f)
