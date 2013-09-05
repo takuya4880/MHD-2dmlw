@@ -28,10 +28,10 @@ subroutine initial(box)
     box%rovx = 0.
     box%rovy = 0.
     box%rovz = 0.
-    box%bx = b*cos(theta)
-    box%by = b*sin(theta)
-    !box%bx = b
-    !box%by = 0.
+    !box%bx = b*cos(theta)
+    !box%by = b*sin(theta)
+    box%bx = b
+    box%by = 0.
     box%bz = 0.
     
     box%pr = (1. + gauss*exp(-( (spread(box%x,2,iy)-con%wid*0.5)**2 &
