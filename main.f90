@@ -15,8 +15,8 @@ program main
     box%con%ix = ix
     box%con%iy = iy
     box%con%marg = marg
-    box%con%wid = 40.
-    box%con%hig = 40.
+    box%con%wid = 150.
+    box%con%hig = 60.
     box%con%dx = box%con%wid/dble(box%con%nx-1)
     box%con%dy = box%con%hig/dble(box%con%ny-1)
     box%con%a = 0.4
