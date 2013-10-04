@@ -21,12 +21,12 @@ program main
     box%con%dy = box%con%hig/dble(box%con%ny-1)
     box%con%a = 0.4
     box%con%q = 3.
-    box%con%gam = 1.05
+    box%con%gam = 5./3.
 
     t = 0.
     tint = 10.
     tnxt = tint
-    tend = 80.
+    tend = 200.
 
     call initial(box, uboundary)
     call boundary(box, uboundary)

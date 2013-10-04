@@ -2,7 +2,7 @@ module defstruct
     implicit none
     integer,parameter :: nx=128
     integer,parameter :: ny=128
-    integer,parameter :: marg=2
+    integer,parameter :: marg=3
     integer,parameter :: ix=nx+2*marg
     integer,parameter :: iy=ny+2*marg
 

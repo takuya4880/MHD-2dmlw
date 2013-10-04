@@ -2,7 +2,7 @@ subroutine initial(box, uboundary)
     use defstruct
     implicit none
     type(cell) :: box
-    double precision :: uboundary(9,2)
+    double precision :: uboundary(9,marg)
 
     integer :: i,j,m
     double precision :: gami               !inberse of gamma
@@ -87,10 +87,10 @@ subroutine initial(box, uboundary)
         end do
     end do
 
-    uboundary(1,1:2) = den(iy-1:iy)
-    uboundary(2:7,1:2) = 0
-    uboundary(8,1:2) = box%e(1,iy-1:iy)
-    uboundary(9,1:2) = pre(iy-1:iy)
+    uboundary(1,1:marg) = den(iy-marg+1:iy)
+    uboundary(2:7,1:marg) = 0
+    uboundary(8,1:marg) = box%e(1,iy-marg+1:iy)
+    uboundary(9,1:marg) = pre(iy-marg+1:iy)
     
 
 end subroutine
