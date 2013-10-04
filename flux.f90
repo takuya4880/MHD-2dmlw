@@ -5,14 +5,14 @@ subroutine flux(box, fx, fy)
     
     double precision :: alp=0.01, etamax=1., vc=1000
     double precision, allocatable :: b2(:,:),roi(:,:), roh(:,:)
-    !double precision, allocatable :: eta(:,:), ex(:,:), ey(:,:), ez(:,:)
-    !double precision, allocatable :: jx(:,:), jy(:,:), jz(:,:)
+    double precision, allocatable :: eta(:,:), ex(:,:), ey(:,:), ez(:,:)
+    double precision, allocatable :: jx(:,:), jy(:,:), jz(:,:)
     allocate(b2(ix,iy))
     allocate(roi(ix,iy))
     allocate(roh(ix,iy))
-    !allocate(eta(ix,iy))
-    !allocate(ex(ix,iy), ey(ix,iy), ez(ix,iy))
-    !allocate(jx(ix,iy), jy(ix,iy), jz(ix,iy))
+    allocate(eta(ix,iy))
+    allocate(ex(ix,iy), ey(ix,iy), ez(ix,iy))
+    allocate(jx(ix,iy), jy(ix,iy), jz(ix,iy))
 
     b2 = box%bx**2 + box%by**2 + box%bz**2
     roi = 1./box%ro
@@ -41,7 +41,6 @@ subroutine flux(box, fx, fy)
             + box%rovz*box%bz) )*roi 
     fy%bpot = 0
     
-    deallocate(b2,roi,roh)
-    !deallocate(b2,roi,roh,eta,ex,ey,ez,jx,jy,jz)
+    deallocate(b2,roi,roh,eta,ex,ey,ez,jx,jy,jz)
 
 end subroutine
