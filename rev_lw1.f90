@@ -16,6 +16,8 @@ subroutine lw1(box, h, fx, fy, s)
     call each1(box%by,h%by,fx%by,fy%by,s%by,ddx,ddy,dt)
     call each1(box%bz,h%bz,fx%bz,fy%bz,s%bz,ddx,ddy,dt)
     call each1(box%e,h%e,fx%e,fy%e,s%e,ddx,ddy,dt)
+    call each1(box%bpot,h%bpot,fx%bpot,fy%bpot,s%bpot,ddx,ddy,dt)
+    
     
 end subroutine
 !contains

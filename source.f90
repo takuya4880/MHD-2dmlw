@@ -24,4 +24,6 @@ subroutine source(box, s)
     s%rovy = box%ro*box%con%gy*spread(fugou,1,ix)
     s%rovz = box%ro*box%con%gz
     s%e = box%rovx*box%con%gx + box%rovy*box%con%gy + box%rovz*box%con%gz
+
+    s%bpot = (box%rovx*box%by - box%rovy*box%bx)/box%ro
 end subroutine

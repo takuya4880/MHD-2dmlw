@@ -28,6 +28,7 @@ subroutine flux(box, fx, fy)
     fx%bz = (box%rovx*box%bz - box%rovz*box%bx) * roi
     fx%e = (roh*box%rovx - box%bx*(box%rovx*box%bx + box%rovy*box%by &
             + box%rovz*box%bz) )*roi 
+    fx%bpot = 0
 
     fy%ro = box%rovy
     fy%rovx = box%rovy*box%rovx*roi - box%by*box%bx
@@ -38,6 +39,7 @@ subroutine flux(box, fx, fy)
     fy%bz = (box%rovy*box%bz - box%rovz*box%by) * roi 
     fy%e = (roh*box%rovy - box%by*(box%rovx*box%bx + box%rovy*box%by &
             + box%rovz*box%bz) )*roi 
+    fy%bpot = 0
     
     deallocate(b2,roi,roh)
     !deallocate(b2,roi,roh,eta,ex,ey,ez,jx,jy,jz)

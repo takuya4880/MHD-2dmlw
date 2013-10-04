@@ -1,7 +1,7 @@
 module defstruct
     implicit none
-    integer,parameter :: nx=256
-    integer,parameter :: ny=256
+    integer,parameter :: nx=128
+    integer,parameter :: ny=128
     integer,parameter :: marg=2
     integer,parameter :: ix=nx+2*marg
     integer,parameter :: iy=ny+2*marg
@@ -18,7 +18,8 @@ module defstruct
         double precision x(ix), y(iy)
         double precision ro(ix,iy), rovx(ix,iy), rovy(ix,iy), rovz(ix,iy)
         double precision bx(ix,iy), by(ix,iy), bz(ix,iy), e(ix,iy) 
-        double precision pr(ix,iy)       
+        double precision pr(ix,iy)
+        double precision bpot(ix,iy)       
     end type    
 
 end module

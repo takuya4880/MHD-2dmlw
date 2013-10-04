@@ -16,6 +16,7 @@ subroutine lw2(box, h, f, fx, fy, s)
     call each2(box%by,h%by,f%by,fx%by,fy%by,s%by,ddx,ddy,dt)
     call each2(box%bz,h%bz,f%bz,fx%bz,fy%bz,s%bz,ddx,ddy,dt)
     call each2(box%e,h%e,f%e,fx%e,fy%e,s%e,ddx,ddy,dt)
+    call each2(box%bpot,h%bpot,f%bpot,fx%bpot,fy%bpot,s%bpot,ddx,ddy,dt)
    
 
 end subroutine

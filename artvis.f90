@@ -18,6 +18,7 @@ subroutine artvis(box, f)
     call eachav(box%by, f%by, kapx, kapy, box%con)
     call eachav(box%bz, f%bz, kapx, kapy, box%con)
     call eachav(box%e, f%e, kapx, kapy, box%con)
+    call eachav(box%bpot, f%bpot, kapx, kapy, box%con)
 
     deallocate(kapx,kapy)
 
