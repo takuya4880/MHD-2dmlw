@@ -9,7 +9,7 @@ subroutine output(box)
 
     do j=1,iy
         do i=1,ix
-            write(23, *)  box%x(i), box%y(j), box%ro(i,j), box%pr(i,j), box%rovx(i,j), box%rovy(i,j)
+            write(23, *)  box%x(i), box%y(j), box%ro(i,j), box%pr(i,j), box%rovx(i,j), box%rovy(i,j), box%bpot(i,j)
         end do
         write(23,*) " "
     end do
