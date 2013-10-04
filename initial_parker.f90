@@ -78,12 +78,12 @@ subroutine initial(box, uboundary)
     box%bpot(1,1)=0.
     do i=2,ix
         box%bpot(i,1) = box%bpot(i-1,1) &
-                        - 0.5*box%con%dx(box%by(i,1)+box%by(i-1,1))
+                        - 0.5*box%con%dx*(box%by(i,1)+box%by(i-1,1))
     end do
     do i=1,ix
         do j=2,iy
             box%bpot(i,j) = box%bpot(i,j-1) &
-                            + 0.5*box%con%dy(box%bx(i,j)+box%bx(i,j-1))
+                            + 0.5*box%con%dy*(box%bx(i,j)+box%bx(i,j-1))
         end do
     end do
 
