@@ -64,7 +64,7 @@ subroutine cppmbc(arr, k, ub)   !constant, periodic, mirror
     implicit none
     double precision :: arr(ix,iy)
     integer :: k
-    double precision :: ub(9,2)
+    double precision :: ub(9,marg)
 
     integer :: i
     
@@ -82,7 +82,7 @@ subroutine cppmbc2(arr, k, ub)   !constant, periodic, mirror
     implicit none
     double precision :: arr(ix,iy)
     integer :: k
-    double precision :: ub(9,2)
+    double precision :: ub(9,marg)
 
     integer :: i
     
