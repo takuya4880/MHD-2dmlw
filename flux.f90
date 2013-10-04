@@ -3,15 +3,24 @@ subroutine flux(box, fx, fy)
     implicit none
     type(cell) :: box, fx, fy
     
+    double precision :: alp=0.01, etamax=1., vc=1000
     double precision, allocatable :: b2(:,:),roi(:,:), roh(:,:)
+    double precision, allocatable :: eta(:,:), ex(:,:), ey(:,:), ez(:,:)
+    double precision, allocatable :: jx(:,:), jy(:,:), jz(:,:)
     allocate(b2(ix,iy))
     allocate(roi(ix,iy))
     allocate(roh(ix,iy))
+    allocate(eta(ix,iy))
+    allocate(ex(ix,iy), ey(ix,iy), ez(ix,iy))
+    allocate(jx(ix,iy), jy(ix,iy), jz(ix,iy))
 
     b2 = box%bx**2 + box%by**2 + box%bz**2
     roi = 1./box%ro
     roh = 0.5*(box%rovx**2+box%rovy**2+box%rovz**2)*roi &
             + box%pr*box%con%gam/(box%con%gam-1.) + b2
+
+    jx = 
+    eta = 
 
     fx%ro = box%rovx
     fx%rovx = box%rovx*box%rovx*roi - box%bx*box%bx + box%pr + 0.5*b2
@@ -33,6 +42,6 @@ subroutine flux(box, fx, fy)
     fy%e = (roh*box%rovy - box%by*(box%rovx*box%bx + box%rovy*box%by &
             + box%rovz*box%bz) )*roi 
     
-    deallocate(b2,roi,roh)
+    deallocate(b2,roi,roh,eta,ex,ey,ez,jx,jy,jz)
 
 end subroutine
