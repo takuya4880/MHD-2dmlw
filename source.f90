@@ -3,12 +3,12 @@ subroutine source(box, s)
     implicit none
     type(cell) :: box, s
     integer :: i
-    double precision :: fugou(iy)
+    double precision :: fugou(iz)
     
-    do i=1,iy
-        if (box%y(i)>0) then 
+    do i=1,iz
+        if (box%z(i)>0) then 
             fugou = 1.
-        else if (box%y(i)<0) then
+        else if (box%z(i)<0) then
             fugou = -1.
         else 
             fugou = 0.
@@ -21,9 +21,9 @@ subroutine source(box, s)
     s%bz = 0.
     s%rovx = box%ro*box%con%gx
     !s%rovy = box%ro*box%con%gy
-    s%rovy = box%ro*box%con%gy*spread(fugou,1,ix)
-    s%rovz = box%ro*box%con%gz
+    s%rovy = box%ro*box%con%gy
+    s%rovz = box%ro*box%con%gz*spread(fugou,1,ix)
     s%e = box%rovx*box%con%gx + box%rovy*box%con%gy + box%rovz*box%con%gz
 
-    s%bpot = (box%rovx*box%by - box%rovy*box%bx)/box%ro
+    s%bpot = (box%rovx*box%bz - box%rovz*box%bx)/box%ro
 end subroutine
