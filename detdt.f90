@@ -5,12 +5,12 @@ subroutine detdt(box)
 
     double precision, allocatable :: v2(:,:)
     double precision d
-    allocate(v2(ix,iy))
+    allocate(v2(ix,iz))
     
-    if (box%con%dx<box%con%dy) then
+    if (box%con%dx<box%con%dz) then
         d = box%con%dx
     else
-        d = box%con%dy
+        d = box%con%dz
     end if
 
 

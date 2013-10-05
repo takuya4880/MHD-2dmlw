@@ -1,18 +1,18 @@
-subroutine flux(box, fx, fy)
+subroutine flux(box, fx, fz)
     use defstruct
     implicit none
-    type(cell) :: box, fx, fy
+    type(cell) :: box, fx, fz
     
     double precision :: alp=0.01, etamax=1., vc=1000
     double precision, allocatable :: b2(:,:),roi(:,:), roh(:,:)
     double precision, allocatable :: eta(:,:), ex(:,:), ey(:,:), ez(:,:)
     double precision, allocatable :: jx(:,:), jy(:,:), jz(:,:)
-    allocate(b2(ix,iy))
-    allocate(roi(ix,iy))
-    allocate(roh(ix,iy))
-    allocate(eta(ix,iy))
-    allocate(ex(ix,iy), ey(ix,iy), ez(ix,iy))
-    allocate(jx(ix,iy), jy(ix,iy), jz(ix,iy))
+    allocate(b2(ix,iz))
+    allocate(roi(ix,iz))
+    allocate(roh(ix,iz))
+    allocate(eta(ix,iz))
+    allocate(ex(ix,iz), ey(ix,iz), ez(ix,iz))
+    allocate(jx(ix,iz), jy(ix,iz), jz(ix,iz))
 
     b2 = box%bx**2 + box%by**2 + box%bz**2
     roi = 1./box%ro
@@ -30,16 +30,16 @@ subroutine flux(box, fx, fy)
             + box%rovz*box%bz) )*roi 
     fx%bpot = 0
 
-    fy%ro = box%rovy
-    fy%rovx = box%rovy*box%rovx*roi - box%by*box%bx
-    fy%rovy = box%rovy*box%rovy*roi - box%by*box%by + box%pr + 0.5*b2
-    fy%rovz = box%rovy*box%rovz*roi - box%by*box%bz
-    fy%bx = (box%rovy*box%bx - box%rovx*box%by) * roi
-    fy%by = 0.
-    fy%bz = (box%rovy*box%bz - box%rovz*box%by) * roi 
-    fy%e = (roh*box%rovy - box%by*(box%rovx*box%bx + box%rovy*box%by &
+    fz%ro = box%rovz
+    fz%rovx = box%rovz*box%rovx*roi - box%bz*box%bx
+    fz%rovy = box%rovz*box%rovy*roi - box%bz*box%by
+    fz%rovz = box%rovz*box%rovz*roi - box%bz*box%bz + box%pr + 0.5*b2
+    fz%bx = (box%rovz*box%bx - box%rovx*box%bz) * roi
+    fz%by = (box%rovz*box%by - box%rovy*box%bz) * roi 
+    fz%bz = 0.
+    fz%e = (roh*box%rovz - box%bz*(box%rovx*box%bx + box%rovy*box%by &
             + box%rovz*box%bz) )*roi 
-    fy%bpot = 0
+    fz%bpot = 0
     
     deallocate(b2,roi,roh,eta,ex,ey,ez,jx,jy,jz)
 

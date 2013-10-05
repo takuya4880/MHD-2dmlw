@@ -11,14 +11,14 @@ program main
     open(23,file="result.dat",status="replace")
 
     box%con%nx = nx
-    box%con%ny = ny
+    box%con%nz = nz
     box%con%ix = ix
-    box%con%iy = iy
+    box%con%iz = iz
     box%con%marg = marg
     box%con%wid = 150.
     box%con%hig = 60.
     box%con%dx = box%con%wid/dble(box%con%nx-1)
-    box%con%dy = box%con%hig/dble(box%con%ny-1)
+    box%con%dz = box%con%hig/dble(box%con%nz-1)
     box%con%a = 0.4
     box%con%q = 3.
     box%con%gam = 5./3.

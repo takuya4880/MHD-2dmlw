@@ -16,11 +16,11 @@ subroutine boundary(box, uboundary)
 
     call fppmbc(box%ro)
     call fppmbc(box%rovx)
-    call fppmbc2(box%rovy)
-    call fppmbc(box%rovz)
+    call fppmbc(box%rovy)
+    call fppmbc2(box%rovz)
     call fppmbc(box%bx)
-    call fppmbc2(box%by)
-    call fppmbc(box%bz)
+    call fppmbc(box%by)
+    call fppmbc2(box%bz)
     call fppmbc(box%e)
     call fppmbc(box%pr)
     call fppmbc(box%bpot)
@@ -31,7 +31,7 @@ end subroutine
 subroutine allfreebc(arr)
     use defstruct
     implicit none
-    double precision ::  arr(ix,iy)
+    double precision ::  arr(ix,iz)
 
     integer i
 
@@ -39,42 +39,42 @@ subroutine allfreebc(arr)
         arr(i,:) = arr(marg+1,:)   
         arr(ix-marg+i,:) = arr(ix-marg,:)
         arr(:,i) = arr(:,marg+1) 
-        arr(:,iy-marg+i) = arr(:,iy-marg)
+        arr(:,iz-marg+i) = arr(:,iz-marg)
     end do
 end subroutine
 
 subroutine fppmbc(arr)  !free, periodic, mirror
     use defstruct
     implicit none
-    double precision :: arr(ix,iy)
+    double precision :: arr(ix,iz)
     integer i
     
     do i=1,marg
         arr(i,:) = arr(ix-2*marg+i,:) 
         arr(ix-marg+i,:) = arr(marg+i,:)
         arr(:,i) = arr(:,2*marg+1-i)   
-        arr(:,iy-marg+i) = arr(:,iy-marg)
+        arr(:,iz-marg+i) = arr(:,iz-marg)
     end do
 end subroutine
 
 subroutine fppmbc2(arr)
     use defstruct
     implicit none
-    double precision :: arr(ix,iy)
+    double precision :: arr(ix,iz)
     integer i
     
     do i=1,marg
         arr(i,:) = arr(ix-2*marg+i,:) 
         arr(ix-marg+i,:) = arr(marg+i,:)
         arr(:,i) = - arr(:,2*marg+1-i)   
-        arr(:,iy-marg+i) = arr(:,iy-marg)
+        arr(:,iz-marg+i) = arr(:,iz-marg)
     end do
 end subroutine
 
 subroutine cppmbc(arr, k, ub)   !constant, periodic, mirror
     use defstruct
     implicit none
-    double precision :: arr(ix,iy)
+    double precision :: arr(ix,iz)
     integer :: k
     double precision :: ub(9,marg)
 
@@ -84,15 +84,15 @@ subroutine cppmbc(arr, k, ub)   !constant, periodic, mirror
         arr(i,:) = arr(ix-2*marg+i,:) 
         arr(ix-marg+i,:) = arr(marg+i,:)
         arr(:,i) = arr(:,2*marg+1-i)   
-        !arr(:,iy-marg+i) = arr(:,iy-marg)
-        arr(:,iy-marg+i) = ub(k,i)
+        !arr(:,iz-marg+i) = arr(:,iz-marg)
+        arr(:,iz-marg+i) = ub(k,i)
     end do
 end subroutine
 
 subroutine cppmbc2(arr, k, ub)   !constant, periodic, mirror
     use defstruct
     implicit none
-    double precision :: arr(ix,iy)
+    double precision :: arr(ix,iz)
     integer :: k
     double precision :: ub(9,marg)
 
@@ -102,8 +102,8 @@ subroutine cppmbc2(arr, k, ub)   !constant, periodic, mirror
         arr(i,:) = arr(ix-2*marg+i,:) 
         arr(ix-marg+i,:) = arr(marg+i,:)
         arr(:,i) = - arr(:,2*marg+1-i)   
-        !arr(:,iy-marg+i) = arr(:,iy-marg)
-        arr(:,iy-marg+i) = ub(k,i)
+        !arr(:,iz-marg+i) = arr(:,iz-marg)
+        arr(:,iz-marg+i) = ub(k,i)
     end do
 end subroutine
 !end subroutine

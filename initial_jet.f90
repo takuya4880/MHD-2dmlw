@@ -7,10 +7,10 @@ subroutine initial(box, uboundary)
     integer :: i,j,m,origin
     double precision :: gami               !inberse of gamma
     double precision :: wid
-    double precision :: amp, tpt, tpho, tcor, x, y, a, ad, lp, phicor
-    double precision :: w, ytr, yfsl, yfsu, ymgc, yinv, betafs, betacor
-    double precision :: den(iy), pre(iy),temp(iy),phi(iy)
-    double precision :: beta(iy),beta1i(iy),beta2i(iy),b(iy),ee(iy) 
+    double precision :: amp, tpt, tpho, tcor, x, z, a, ad, lp, phicor
+    double precision :: w, ztr, zfsl, zfsu, zmgc, zinv, betafs, betacor
+    double precision :: den(iz), pre(iz),temp(iz),phi(iz)
+    double precision :: beta(iz),beta1i(iz),beta2i(iz),b(iz),ee(iz) 
     m = box%con%marg
     wid = box%con%wid
     gami = 1./box%con%gam
@@ -22,52 +22,52 @@ subroutine initial(box, uboundary)
     tpho = 1.
     tcor = tpho * tpt
     w = 0.5
-    ytr = 8.
-    yfsl = -4.
-    yfsu = -2.
-    ymgc = 9.5
-    yinv = 5.
+    ztr = 8.
+    zfsl = -4.
+    zfsu = -2.
+    zmgc = 9.5
+    zinv = 5.
     betafs=4.
     betacor=0.2
     a = 2.
     ad = a*(box%con%gam-1.)/box%con%gam
 
-    origin = int(5./box%con%hig*ny)+1+m
+    origin = int(5./box%con%hig*nz)+1+m
     
     forall(i=1:ix) box%x(i)=box%con%dx*(i-m)
-    forall(i=1:iy) box%y(i)=box%con%dy*(i-origin)
+    forall(i=1:iz) box%z(i)=box%con%dz*(i-origin)
     
     box%con%gx = 0.
-    box%con%gy = -gami
-    box%con%gz = 0.
+    box%con%gy = 0.
+    box%con%gz = -gami 
 
-    do i=origin+1,iy
-        temp(i) = tpho + 0.5 * (tcor-tpho)*(tanh((box%y(i)-ytr)/w) + 1.)
+    do i=origin+1,iz
+        temp(i) = tpho + 0.5 * (tcor-tpho)*(tanh((box%z(i)-ztr)/w) + 1.)
     end do
     do i=origin,1,-1
-        temp(i) = tpho - ad*box%y(i)
+        temp(i) = tpho - ad*box%z(i)
     end do
 
     den(origin) = 1.
     pre(origin) = gami*temp(origin)
     
-    beta1i = 0.25/betafs*(tanh((box%y-yfsl)/w) + 1.) * (-tanh((box%y-yfsu)/w) + 1.)
-    beta2i = 0.5/betacor*(tanh((box%y-ymgc)/w) + 1.)
+    beta1i = 0.25/betafs*(tanh((box%z-zfsl)/w) + 1.) * (-tanh((box%z-zfsu)/w) + 1.)
+    beta2i = 0.5/betacor*(tanh((box%z-zmgc)/w) + 1.)
     beta = 1./(beta1i+beta2i)
-    do i=origin+1,iy
-        den(i) = den(i-1) * ((1.+1./beta(i-1))*temp(i-1) + 0.5*box%con%gam*box%con%dy*box%con%gy)&
-                          / ((1.+1./beta(i))*temp(i) - 0.5*box%con%gam*box%con%dy*box%con%gy)
+    do i=origin+1,iz
+        den(i) = den(i-1) * ((1.+1./beta(i-1))*temp(i-1) + 0.5*box%con%gam*box%con%dz*box%con%gz)&
+                          / ((1.+1./beta(i))*temp(i) - 0.5*box%con%gam*box%con%dz*box%con%gz)
     end do
     do i=origin-1,1,-1
-        den(i) = den(i+1) * ((1.+1./beta(i+1))*temp(i+1) - 0.5*box%con%gam*box%con%dy*box%con%gy)&
-                          / ((1.+1./beta(i))*temp(i) + 0.5*box%con%gam*box%con%dy*box%con%gy)
+        den(i) = den(i+1) * ((1.+1./beta(i+1))*temp(i+1) - 0.5*box%con%gam*box%con%dz*box%con%gz)&
+                          / ((1.+1./beta(i))*temp(i) + 0.5*box%con%gam*box%con%dz*box%con%gz)
     end do
     
     pre = pre(origin) * (den/den(origin)) * (temp/temp(origin))
     b = sqrt(2.*pre/beta)
     
-    do i=1,iy
-        if (box%y(i)<yinv) then
+    do i=1,iz
+        if (box%z(i)<zinv) then
             phi(i)=0.
         else
             phi(i)=phicor
@@ -75,8 +75,8 @@ subroutine initial(box, uboundary)
     end do
 
     open(24,file="initial.dat",status="replace")
-    do i=1,iy
-       write (24,*) box%y(i), den(i), pre(i), temp(i), 1./beta(i), b(i), phi(i)
+    do i=1,iz
+       write (24,*) box%z(i), den(i), pre(i), temp(i), 1./beta(i), b(i), phi(i)
     end do
     close(24)
 
@@ -85,18 +85,18 @@ subroutine initial(box, uboundary)
     box%rovy = 0.
     box%rovz = 0.
     do i=1,ix
-        do j=1,iy
+        do j=1,iz
             x = box%x(i)
-            y = box%y(j)
-            if (y>yfsl .and. y<yfsu .and. x>0.5*wid-0.25*lp .and. x<0.5*wid+0.25*lp) then
-                box%rovy(i,j) = box%ro(i,j)*amp*cos(8.*atan(1.d0)*(x-0.5*wid)/lp)
+            z = box%z(j)
+            if (z>zfsl .and. z<zfsu .and. x>0.5*wid-0.25*lp .and. x<0.5*wid+0.25*lp) then
+                box%rovz(i,j) = box%ro(i,j)*amp*cos(8.*atan(1.d0)*(x-0.5*wid)/lp)
             end if
         end do
     end do
 
     box%bx = spread(b*cos(phi),1,ix)
-    box%by = spread(b*sin(phi),1,ix)
-    box%bz = 0.
+    box%by = 0.
+    box%bz = spread(b*sin(phi),1,ix)
     box%pr = spread(pre,1,ix)  
     box%e = 0.5*(box%rovx**2 + box%rovy**2 + box%rovz**2)/box%ro &
             + box%pr/(box%con%gam-1.) &
@@ -105,19 +105,19 @@ subroutine initial(box, uboundary)
     box%bpot(1,1)=0.
     do i=2,ix
         box%bpot(i,1) = box%bpot(i-1,1) &
-                        - 0.5*box%con%dx*(box%by(i,1)+box%by(i-1,1))
+                        - 0.5*box%con%dx*(box%bz(i,1)+box%bz(i-1,1))
     end do
     do i=1,ix
-        do j=2,iy
+        do j=2,iz
             box%bpot(i,j) = box%bpot(i,j-1) &
-                            + 0.5*box%con%dy*(box%bx(i,j)+box%bx(i,j-1))
+                            + 0.5*box%con%dz*(box%bx(i,j)+box%bx(i,j-1))
         end do
     end do
 
-    uboundary(1,1:marg) = den(iy-marg+1:iy)
+    uboundary(1,1:marg) = den(iz-marg+1:iz)
     uboundary(2:7,1:marg) = 0
-    uboundary(8,1:marg) = box%e(1,iy-marg+1:iy)
-    uboundary(9,1:marg) = pre(iy-marg+1:iy)
+    uboundary(8,1:marg) = box%e(1,iz-marg+1:iz)
+    uboundary(9,1:marg) = pre(iz-marg+1:iz)
     
 
 end subroutine
