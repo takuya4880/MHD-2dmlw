@@ -13,7 +13,7 @@ subroutine initial(box, uboundary)
     double precision :: beta(iy),beta1i(iy),beta2i(iy),b(iy),ee(iy) 
     m = box%con%marg
     wid = box%con%wid
-    gami = box%con%gam
+    gami = 1./box%con%gam
 
     amp = 0.05
     lp = 20. 
