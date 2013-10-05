@@ -4,15 +4,27 @@ subroutine boundary(box, uboundary)
     type(cell) :: box
     double precision :: uboundary(9,2)
 
-    call cppmbc(box%ro, 1, uboundary)
-    call cppmbc(box%rovx, 2, uboundary)
-    call cppmbc2(box%rovy, 3, uboundary)
-    call cppmbc(box%rovz, 4, uboundary)
-    call cppmbc(box%bx, 5, uboundary)
-    call cppmbc2(box%by, 6, uboundary)
-    call cppmbc(box%bz, 7, uboundary)
-    call cppmbc(box%e, 8, uboundary)
-    call cppmbc(box%pr, 9, uboundary)
+    !call cppmbc(box%ro, 1, uboundary)
+    !call cppmbc(box%rovx, 2, uboundary)
+    !call cppmbc2(box%rovy, 3, uboundary)
+    !call cppmbc(box%rovz, 4, uboundary)
+    !call cppmbc(box%bx, 5, uboundary)
+    !call cppmbc2(box%by, 6, uboundary)
+    !call cppmbc(box%bz, 7, uboundary)
+    !call cppmbc(box%e, 8, uboundary)
+    !call cppmbc(box%pr, 9, uboundary)
+
+    call fppmbc(box%ro)
+    call fppmbc(box%rovx)
+    call fppmbc2(box%rovy)
+    call fppmbc(box%rovz)
+    call fppmbc(box%bx)
+    call fppmbc2(box%by)
+    call fppmbc(box%bz)
+    call fppmbc(box%e)
+    call fppmbc(box%pr)
+    call fppmbc(box%bpot)
+
 
 end subroutine 
 !contains
