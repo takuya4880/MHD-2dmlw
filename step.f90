@@ -11,9 +11,11 @@ subroutine step(box)
     h = box
     f = box
         
-    forall(i=1:ix) h%x(i)=h%con%dx*(i-h%con%marg-1.)
-    forall(i=1:iy) h%y(i)=h%con%dy*(i-h%con%marg-1.)
-    
+    !forall(i=1:ix) h%x(i)=h%con%dx*(i-h%con%marg-1.)
+    !forall(i=1:iy) h%y(i)=h%con%dy*(i-h%con%marg-1.)
+    h%x = box%x + 0.5*box%con%dx
+    h%y = box%y + 0.5*box%con%dy
+
     call flux(box, fx, fy)
     call source(box, s)
     call lw1(box, h, fx, fy, s)
