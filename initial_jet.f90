@@ -4,7 +4,7 @@ subroutine initial(box, uboundary)
     type(cell) :: box
     double precision :: uboundary(9,marg)
 
-    integer :: i,j,m
+    integer :: i,j,m,origin
     double precision :: gami               !inberse of gamma
     double precision :: wid
     double precision :: amp, tpt, tpho, tcor, x, y, a, ad, lp, phicor
@@ -13,6 +13,7 @@ subroutine initial(box, uboundary)
     double precision :: beta(iy),beta1i(iy),beta2i(iy),b(iy),ee(iy) 
     m = box%con%marg
     wid = box%con%wid
+    gami = box%con%gam
 
     amp = 0.05
     lp = 20. 
@@ -21,43 +22,48 @@ subroutine initial(box, uboundary)
     tpho = 1.
     tcor = tpho * tpt
     w = 0.5
-    ytr = 13.
-    yfsl = 1.
-    yfsu = 3.
-    ymgc = 14.5
-    yinv = 10.
+    ytr = 8.
+    yfsl = -4.
+    yfsu = -2.
+    ymgc = 9.5
+    yinv = 5.
     betafs=4.
     betacor=0.2
     a = 2.
     ad = a*(box%con%gam-1.)/box%con%gam
+
+    origin = int(5./box%con%hig*ny)+1+m
     
-    forall(i=1:ix) box%x(i)=box%con%dx*(i-m-0.5)
-    forall(i=1:iy) box%y(i)=box%con%dy*(i-m-0.5)
+    forall(i=1:ix) box%x(i)=box%con%dx*(i-m)
+    forall(i=1:iy) box%y(i)=box%con%dy*(i-origin)
     
-    gami = 1./box%con%gam
     box%con%gx = 0.
     box%con%gy = -gami
     box%con%gz = 0.
 
-    den = 1.
-    den(m+1) = 1.
-    pre(m+1) = gami
-    
-    do i=1,iy
-        if (box%y(i)>5) then
-            temp(i) = tpho + 0.5 * (tcor-tpho)*(tanh((box%y(i)-ytr)/w) + 1.)
-        else 
-            temp(i) = tpho - ad*(box%y(i)-5.)
-        end if 
+    do i=origin+1,iy
+        temp(i) = tpho + 0.5 * (tcor-tpho)*(tanh((box%y(i)-ytr)/w) + 1.)
     end do
+    do i=origin,1,-1
+        temp(i) = tpho - ad*box%y(i)
+    end do
+
+    den(origin) = 1.
+    pre(origin) = gami*temp(origin)
+    
     beta1i = 0.25/betafs*(tanh((box%y-yfsl)/w) + 1.) * (-tanh((box%y-yfsu)/w) + 1.)
     beta2i = 0.5/betacor*(tanh((box%y-ymgc)/w) + 1.)
     beta = 1./(beta1i+beta2i)
-    do i=m+2,iy
+    do i=origin+1,iy
         den(i) = den(i-1) * ((1.+1./beta(i-1))*temp(i-1) + 0.5*box%con%gam*box%con%dy*box%con%gy)&
                           / ((1.+1./beta(i))*temp(i) - 0.5*box%con%gam*box%con%dy*box%con%gy)
     end do
-    pre = pre(m+1) * (den/den(m+1)) * (temp/temp(m+1))
+    do i=origin-1,1,-1
+        den(i) = den(i+1) * ((1.+1./beta(i+1))*temp(i+1) - 0.5*box%con%gam*box%con%dy*box%con%gy)&
+                          / ((1.+1./beta(i))*temp(i) + 0.5*box%con%gam*box%con%dy*box%con%gy)
+    end do
+    
+    pre = pre(origin) * (den/den(origin)) * (temp/temp(origin))
     b = sqrt(2.*pre/beta)
     
     do i=1,iy
@@ -70,7 +76,7 @@ subroutine initial(box, uboundary)
 
     open(24,file="initial.dat",status="replace")
     do i=1,iy
-       write (24,*) box%y(i), den(i), pre(i), temp(i), beta(i), b(i), phi(i)
+       write (24,*) box%y(i), den(i), pre(i), temp(i), 1./beta(i), b(i), phi(i)
     end do
     close(24)
 
