@@ -89,7 +89,7 @@ subroutine initial(box, uboundary)
             x = box%x(i)
             y = box%y(j)
             if (y>yfsl .and. y<yfsu .and. x>0.5*wid-0.25*lp .and. x<0.5*wid+0.25*lp) then
-                box%rovx(i,j) = box%ro(i,j)*amp*cos(8.*atan(1.d0)*(x-0.5*wid)/lp)
+                box%rovy(i,j) = box%ro(i,j)*amp*cos(8.*atan(1.d0)*(x-0.5*wid)/lp)
             end if
         end do
     end do
