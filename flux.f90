@@ -3,6 +3,7 @@ subroutine flux(box, fx, fz)
     implicit none
     type(cell) :: box, fx, fz
     
+    integer :: i,j
     double precision :: alp=0.01, etamax=1., vc=1000
     double precision, allocatable :: b2(:,:),roi(:,:), roh(:,:)
     double precision, allocatable :: eta(:,:), ex(:,:), ey(:,:), ez(:,:)
@@ -50,7 +51,7 @@ subroutine flux(box, fx, fz)
     fx%by = -ez
     fx%bz = ey
     fx%e = (roh*box%rovx - box%bx*(box%rovx*box%bx + box%rovy*box%by &
-            + box%rovz*box%bz) )*roi + (ey*box%ez - ez*box%by)
+            + box%rovz*box%bz) )*roi + (ey*box%bz - ez*box%by)
     fx%bpot = 0
 
     fz%ro = box%rovz
