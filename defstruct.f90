@@ -1,6 +1,6 @@
 module defstruct
     implicit none
-    integer,parameter :: nx=200
+    integer,parameter :: nx=300
     integer,parameter :: ny=200
     integer,parameter :: marg=4
     integer,parameter :: ix=nx+2*marg
