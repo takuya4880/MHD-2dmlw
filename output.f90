@@ -15,4 +15,11 @@ subroutine output(box)
     end do
     write(23,*) " "
 
+    !i=100
+    !do j=1,iz
+    !    write(23, *)  box%z(j), box%ro(i,j), box%pr(i,j), box%rovx(i,j), box%rovz(i,j), box%bpot(i,j)
+    !end do
+    !write(23,*) " "
+    !write(23,*) " "
+
 end subroutine

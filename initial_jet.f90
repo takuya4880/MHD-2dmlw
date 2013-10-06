@@ -114,9 +114,12 @@ subroutine initial(box, uboundary)
         end do
     end do
 
+    uboundary = 0
     uboundary(1,1:marg) = den(iz-marg+1:iz)
-    uboundary(2:7,1:marg) = 0
-    uboundary(8,1:marg) = box%e(1,iz-marg+1:iz)
+    uboundary(5,1:marg) = box%bx(100,iz-marg+1:iz)
+    uboundary(6,1:marg) = box%by(100,iz-marg+1:iz)
+    uboundary(7,1:marg) = box%bz(100,iz-marg+1:iz)
+    uboundary(8,1:marg) = box%e(100,iz-marg+1:iz)
     uboundary(9,1:marg) = pre(iz-marg+1:iz)
     
 
