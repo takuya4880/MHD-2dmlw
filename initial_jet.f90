@@ -114,15 +114,24 @@ subroutine initial(box, uboundary)
         end do
     end do
 
-    uboundary(1,1:marg) = den(iz-marg+1:iz)
-    uboundary(2,1:marg) = box%rovx(100,iz-marg+1:iz)
-    uboundary(3,1:marg) = box%rovy(100,iz-marg+1:iz)
-    uboundary(4,1:marg) = box%rovz(100,iz-marg+1:iz)
-    uboundary(5,1:marg) = box%bx(100,iz-marg+1:iz)
-    uboundary(6,1:marg) = box%by(100,iz-marg+1:iz)
-    uboundary(7,1:marg) = box%bz(100,iz-marg+1:iz)
-    uboundary(8,1:marg) = box%e(100,iz-marg+1:iz)
-    uboundary(9,1:marg) = pre(iz-marg+1:iz)
+    !uboundary(1,1:marg) = den(iz-marg+1:iz)
+    !uboundary(2,1:marg) = box%rovx(100,iz-marg+1:iz)
+    !uboundary(3,1:marg) = box%rovy(100,iz-marg+1:iz)
+    !uboundary(4,1:marg) = box%rovz(100,iz-marg+1:iz)
+    !uboundary(5,1:marg) = box%bx(100,iz-marg+1:iz)
+    !uboundary(6,1:marg) = box%by(100,iz-marg+1:iz)
+    !uboundary(7,1:marg) = box%bz(100,iz-marg+1:iz)
+    !uboundary(8,1:marg) = box%e(100,iz-marg+1:iz)
+    !uboundary(9,1:marg) = pre(iz-marg+1:iz)
     
+    uboundary(1,1:marg) = den(iz-marg+1:iz) - den(iz-marg:iz-1)
+    uboundary(2,1:marg) = box%rovx(100,iz-marg+1:iz) - box%rovx(100,iz-marg:iz-1)
+    uboundary(3,1:marg) = box%rovy(100,iz-marg+1:iz) - box%rovy(100,iz-marg:iz-1)
+    uboundary(4,1:marg) = box%rovz(100,iz-marg+1:iz) - box%rovz(100,iz-marg:iz-1)
+    uboundary(5,1:marg) = box%bx(100,iz-marg+1:iz) - box%bx(100,iz-marg:iz-1)
+    uboundary(6,1:marg) = box%by(100,iz-marg+1:iz) - box%by(100,iz-marg:iz-1)
+    uboundary(7,1:marg) = box%bz(100,iz-marg+1:iz) - box%bz(100,iz-marg:iz-1)
+    uboundary(8,1:marg) = box%e(100,iz-marg+1:iz) - box%e(100,iz-marg:iz-1)
+    uboundary(9,1:marg) = pre(iz-marg+1:iz) - pre(iz-marg:iz-1)
 
 end subroutine
