@@ -154,7 +154,7 @@ subroutine gppmbc2(arr, k, ub)   !gradient, periodic, mirror
     end do
 end subroutine
 
-subroutine bprtbc(arr)   !side periodic boundary for magnetic potential
+subroutine bpotbc(arr)   !side periodic boundary for magnetic potential
     use defstruct
     implicit none
     double precision :: arr(ix,iz)
