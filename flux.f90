@@ -31,7 +31,7 @@ subroutine flux(box, fx, fz)
             if (eta(i,j)<vc) then
                 eta(i,j) = 0.
             else 
-                eta(i,j) = alp*(eta(i,j)-1.)**2
+                eta(i,j) = alp*(eta(i,j)/vc-1.)**2
                 if (eta(i,j)>etamax) then
                     eta(i,j) = etamax
                 end if
