@@ -1,3 +1,8 @@
+module l1
+implicit none
+
+contains
+
 subroutine lw1(box, h, fx, fz, s)
     use defstruct
     implicit none
@@ -42,4 +47,4 @@ subroutine each1(u,h,fx,fz,s,ddx,ddz,dt)
 
 end subroutine
 
-!end subroutine
+end module 

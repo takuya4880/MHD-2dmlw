@@ -1,14 +1,24 @@
 program main
-    use defstruct    
+    use defstruct   
+    use ic 
+    use bc 
+    use outp 
+    use pr 
+    use dt 
+    use st 
+    use l1 
+    use l2 
+    use sc 
+    use flx 
+    use av
     implicit none
     
     type(cell),pointer :: box
+    double precision :: uboundary(9,marg)
+    
     double precision :: t, tint, tend, tnxt
-    double precision :: uboundary(9,2)
 
     allocate(box)
-
-    open(23,file="result.dat",status="replace")
 
     box%con%nx = nx
     box%con%nz = nz
@@ -24,9 +34,11 @@ program main
     box%con%gam = 5./3.
 
     t = 0.
-    tint = 1.
+    tint = 0.1
     tnxt = tint
-    tend = 200.
+    tend = 0.1
+
+    open(23,file="result.dat",status="replace")
 
     call initial(box, uboundary)
     call boundary(box, uboundary)

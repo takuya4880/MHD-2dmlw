@@ -1,3 +1,8 @@
+module dt
+implicit none
+
+contains
+
 subroutine detdt(box)
     use defstruct
     implicit none
@@ -21,3 +26,5 @@ subroutine detdt(box)
     box%con%dt = box%con%a * d / sqrt(maxval(v2))
     deallocate(v2)
 end subroutine
+
+end module

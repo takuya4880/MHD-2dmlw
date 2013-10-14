@@ -5,6 +5,7 @@ module defstruct
     integer,parameter :: marg=4
     integer,parameter :: ix=nx+2*marg
     integer,parameter :: iz=nz+2*marg
+    
 
     type constants 
         integer nx, nz, ix, iz, marg

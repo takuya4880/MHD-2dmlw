@@ -1,3 +1,8 @@
+module ic
+implicit none
+
+contains
+
 subroutine initial(box, uboundary)
     use defstruct
     implicit none
@@ -135,3 +140,5 @@ subroutine initial(box, uboundary)
     uboundary(9,1:marg) = pre(iz-marg+1:iz) - pre(iz-marg:iz-1)
 
 end subroutine
+
+end module

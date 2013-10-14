@@ -1,3 +1,8 @@
+module flx
+implicit none
+
+contains
+
 subroutine flux(box, fx, fz)
     use defstruct
     implicit none
@@ -68,3 +73,5 @@ subroutine flux(box, fx, fz)
     deallocate(b2,roi,roh,eta,ex,ey,ez,jx,jy,jz)
 
 end subroutine
+
+end module
