@@ -34,9 +34,9 @@ program main
     box%con%gam = 5./3.
 
     t = 0.
-    tint = 0.1
+    tint = 1.
     tnxt = tint
-    tend = 0.1
+    tend = 1.
 
 
     open(23,file="result.dat",status="replace")
