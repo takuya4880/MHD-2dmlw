@@ -4,7 +4,7 @@ program main
     
     type(cell),pointer :: box
     double precision :: t, tint, tend, tnxt
-    double precision :: uboundary(9,2)
+    double precision :: uboundary(9,marg)
 
     allocate(box)
 
