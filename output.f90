@@ -1,4 +1,4 @@
-module outp
+module op
 implicit none
 
 contains

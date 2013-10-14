@@ -2,7 +2,7 @@ program main
     use defstruct   
     use ic 
     use bc 
-    use outp 
+    use op 
     use pr 
     use dt 
     use st 
