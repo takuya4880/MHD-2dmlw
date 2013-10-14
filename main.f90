@@ -38,6 +38,7 @@ program main
     tnxt = tint
     tend = 0.1
 
+
     open(23,file="result.dat",status="replace")
 
     call initial(box, uboundary)
