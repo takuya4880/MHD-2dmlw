@@ -1,7 +1,7 @@
 module defstruct
     implicit none
-    integer,parameter :: nx=600
-    integer,parameter :: nz=400
+    integer,parameter :: nx=300
+    integer,parameter :: nz=200
     integer,parameter :: marg=4
     integer,parameter :: ix=nx+2*marg
     integer,parameter :: iz=nz+2*marg
