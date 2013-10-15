@@ -8,11 +8,11 @@ subroutine flux(box, fx, fz)
     
     integer :: i,j
     double precision :: alp=0.01, etamax=1., vc=1000
-    double precision :: b2,roi,roh,vx,vy,vz,bx,by,bz,pr
+    double precision :: b2,roi,h,vx,vy,vz,bx,by,bz,pr
     double precision :: eta, ex, ey, ez
     double precision :: jx, jy, jz
 
-    !$omp parallel do private(i,roi,vx,vy,vz,bx,by,bz,pr,b2,roh,jx,jy,jz,eta,ex,ey,ez)
+    !$omp parallel do private(i,roi,vx,vy,vz,bx,by,bz,pr,b2,h,jx,jy,jz,eta,ex,ey,ez)
     do j=2,iz-1
         do i=2,ix-1
             roi = 1./box%ro(i,j)
@@ -24,8 +24,8 @@ subroutine flux(box, fx, fz)
             bz = box%bz(i,j)
             pr = box%pr(i,j)
             b2 = bx**2 + by**2 + bz**2
-            roh = 0.5*(vx**2+vy**2+vz**2) &
-                        + pr*box%con%gam/(box%con%gam-1.) + b2
+            h = 0.5*(vx**2+vy**2+vz**2)*box%ro(i,j) &
+                        + pr*box%con%gam/(box%con%gam-1.)
 
             jx = -(box%by(i,j+1)-box%by(i,j-1))/(2.*box%con%dz)
             jy = (box%bx(i,j+1)-box%bx(i,j-1))/(2.*box%con%dz) &
@@ -53,7 +53,7 @@ subroutine flux(box, fx, fz)
             fx%bx(i,j) = 0.
             fx%by(i,j) = -ez
             fx%bz(i,j) = ey
-            fx%e(i,j) = (roh*vx - bx*(vx*bx + vy*by + vz*bz) ) + (ey*bz - ez*by) 
+            fx%e(i,j) = h*vx + (ey*bz - ez*by) 
             fx%bpot(i,j) = 0
 
             fz%ro(i,j) = box%rovz(i,j)
@@ -63,7 +63,7 @@ subroutine flux(box, fx, fz)
             fz%bx(i,j) = -ey
             fz%by(i,j) = ex
             fz%bz(i,j) = 0.
-            fz%e(i,j) = (roh*vz - bz*(vx*bx + vy*by + vz*bz) ) + (ex*by - ey*bx)
+            fz%e(i,j) = h*vz + (ex*by - ey*bx)
             fz%bpot(i,j) = 0
         end do
     end do
