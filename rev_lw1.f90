@@ -1,3 +1,6 @@
+module l1
+implicit none 
+contains
 subroutine lw1(box, h, fx, fz, s)
     use defstruct
     implicit none
@@ -23,6 +26,7 @@ end subroutine
 !contains
 subroutine each1(u,h,fx,fz,s,ddx,ddz,dt)
     use defstruct
+    !$use omp_lib
     implicit none
     double precision :: u(ix,iz),h(ix,iz),fx(ix,iz),fz(ix,iz),s(ix,iz)
     double precision :: ddx, ddz, dt
@@ -30,6 +34,7 @@ subroutine each1(u,h,fx,fz,s,ddx,ddz,dt)
     integer i,j
     double precision fffx, fffz, ss
 
+    !$omp parallel do private(j,fffx,fffz,ss) 
     do i=1,iz-1
         do j=1,ix-1
             fffx = 0.5 * ( fx(j+1,i+1)+fx(j+1,i)-fx(j,i+1)-fx(j,i) )
@@ -39,6 +44,6 @@ subroutine each1(u,h,fx,fz,s,ddx,ddz,dt)
                         - 0.5*(ddx*fffx + ddz*fffz - dt*ss)
         end do
     end do
-
+    !$omp end parallel do
 end subroutine
-
+end module 

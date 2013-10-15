@@ -1,11 +1,19 @@
 program main
     use defstruct   
+    use ic
+    use bc
+    use op 
+    use pr
+    use dt
+    use st
+    !$use omp_lib
     implicit none
     
     type(cell),pointer :: box
     double precision :: uboundary(9,marg)
     double precision :: t, tint, tend, tnxt
 
+    !call omp_set_num_threads(2)
     allocate(box)
 
     box%con%nx = nx
@@ -22,16 +30,15 @@ program main
     box%con%gam = 5./3.
 
     t = 0.
-    tint = 0.1
+    tint = 1.
     tnxt = tint
-    tend = 0.1
-
+    tend = 1.
 
     open(23,file="result.dat",status="replace")
 
     call initial(box, uboundary)
     call boundary(box, uboundary)
-    call output(box)
+    !call output(box)
     call pressure(box)
 
     do
@@ -41,7 +48,7 @@ program main
         t = t + box%con%dt
         print *, t, box%con%dt
         if (t>=tnxt) then
-            call output(box)
+            !call output(box)
             tnxt = tnxt + tint
         endif
         if (t>tend) exit

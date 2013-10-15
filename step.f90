@@ -1,5 +1,15 @@
+module st
+implicit none 
+contains
 subroutine step(box)
     use defstruct
+    use flx
+    use sc
+    use l1
+    use pr
+    use l2
+    use av
+
     implicit none
     type(cell) :: box
     type(cell), pointer :: fx, fz, s, h, f
@@ -31,3 +41,4 @@ subroutine step(box)
     deallocate(fx, fz, s, h, f)
 
 end subroutine
+end module

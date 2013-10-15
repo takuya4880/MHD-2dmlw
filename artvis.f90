@@ -1,14 +1,20 @@
+module av
+implicit none
+contains
 subroutine artvis(box, f)
     use defstruct
+    !$use omp_lib
     implicit none
     type(cell) :: box, f
     double precision, allocatable :: kapx(:,:),kapz(:,:)
     allocate(kapx(ix,iz),kapz(ix,iz))
     
+    !$omp parallel workshare
     kapx(2:ix,:) = box%con%q * abs(box%rovx(2:ix,:)/box%ro(2:ix,:) &
                                     - box%rovx(1:ix-1,:)/box%ro(1:ix-1,:))
     kapz(:,2:iz) = box%con%q * abs(box%rovz(:,2:iz)/box%ro(:,2:iz) &
                                     - box%rovz(:,1:iz-1)/box%ro(:,1:iz-1)) 
+    !$omp end parallel workshare
 
     call eachav(box%ro, f%ro, kapx, kapz, box%con)
     call eachav(box%rovx, f%rovx, kapx, kapz, box%con)
@@ -26,6 +32,7 @@ end subroutine
 !contains    
 subroutine eachav(box,f,kapx,kapz,con)
     use defstruct
+    !$use omp_lib
     double precision :: box(ix,iz),f(ix,iz)
     double precision :: kapx(ix,iz),kapz(ix,iz)
     type(constants) con
@@ -36,6 +43,7 @@ subroutine eachav(box,f,kapx,kapz,con)
     ddx = con%dt / con%dx
     ddz = con%dt / con%dz
     
+    !$omp parallel workshare
     difx(2:ix,:) = f(2:ix,:) - f(1:ix-1,:)
     difz(:,2:iz) = f(:,2:iz) - f(:,1:iz-1)
 
@@ -44,6 +52,7 @@ subroutine eachav(box,f,kapx,kapz,con)
                        - kapx(3:ix-2,3:iz-2)*difx(3:ix-2,3:iz-2) ) &
              + ddz * ( kapz(3:ix-2,4:iz-1)*difz(3:ix-2,4:iz-1)     &
                        - kapz(3:ix-2,3:iz-2)*difz(3:ix-2,3:iz-2) ) 
+    !$omp end parallel workshare
     deallocate(difx,difz)
 end subroutine 
-
+end module 

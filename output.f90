@@ -1,3 +1,6 @@
+module op
+implicit none
+contains
 subroutine output(box)
     use defstruct
     implicit none
@@ -23,4 +26,4 @@ subroutine output(box)
     !write(23,*) " "
 
 end subroutine
-
+end module 

@@ -1,3 +1,7 @@
+
+module dt
+implicit none 
+contains
 subroutine detdt(box)
     use defstruct
     implicit none
@@ -22,3 +26,4 @@ subroutine detdt(box)
     deallocate(v2)
 end subroutine
 
+end module

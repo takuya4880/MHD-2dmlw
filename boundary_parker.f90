@@ -1,3 +1,6 @@
+module bc
+implicit none 
+contains
 subroutine boundary(box, uboundary)
     use defstruct
     implicit none
@@ -167,3 +170,4 @@ subroutine bpotbc(arr)   !side periodic boundary for magnetic potential
     end do
 end subroutine
 
+end module

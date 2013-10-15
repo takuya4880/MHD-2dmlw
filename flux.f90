@@ -1,5 +1,9 @@
+module flx
+implicit none
+contains
 subroutine flux(box, fx, fz)
     use defstruct
+    !$use omp_lib
     implicit none
     type(cell) :: box, fx, fz
     
@@ -15,6 +19,9 @@ subroutine flux(box, fx, fz)
     allocate(ex(ix,iz), ey(ix,iz), ez(ix,iz))
     allocate(jx(ix,iz), jy(ix,iz), jz(ix,iz))
 
+
+    !$omp parallel
+    !$omp workshare
     b2 = box%bx**2 + box%by**2 + box%bz**2
     roi = 1./box%ro
     roh = 0.5*(box%rovx**2+box%rovy**2+box%rovz**2)*roi &
@@ -26,6 +33,8 @@ subroutine flux(box, fx, fz)
     jx(2:ix-1,2:iz-1) = (box%by(3:ix,2:iz-1)-box%by(1:ix-2,2:iz-1))/(2.*box%con%dx)
 
     eta = sqrt((jx**2+jy**2+jz**2)*16.*atan(1.0))*roi  !calculate vd
+    !$omp end workshare
+    !$omp do private(i) 
     do j=1,iz
         do i=1,ix
             if (eta(i,j)<vc) then
@@ -38,7 +47,8 @@ subroutine flux(box, fx, fz)
             end if
         end do
     end do
-
+    !$omp end do
+    !$omp workshare 
     ex = eta*jx + (-box%rovy*box%bz+box%rovz*box%by)*roi
     ey = eta*jy + (-box%rovz*box%bx+box%rovx*box%bz)*roi
     ez = eta*jz + (-box%rovx*box%by+box%rovy*box%bx)*roi
@@ -64,8 +74,10 @@ subroutine flux(box, fx, fz)
     fz%e = (roh*box%rovz - box%bz*(box%rovx*box%bx + box%rovy*box%by &
             + box%rovz*box%bz) )*roi + (ex*box%by - ey*box%bx)
     fz%bpot = 0
+    !$omp end workshare 
+    !$omp end parallel
     
     deallocate(b2,roi,roh,eta,ex,ey,ez,jx,jy,jz)
 
 end subroutine
-
+end module 
