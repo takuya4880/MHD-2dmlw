@@ -1,8 +1,3 @@
-module pr
-implicit none
-
-contains
-
 subroutine pressure(box)
     use defstruct
     implicit none
@@ -15,5 +10,3 @@ subroutine pressure(box)
     box%pr = 0.5*(box%pr + abs(box%pr))
 
 end subroutine
-
-end module

@@ -1,8 +1,3 @@
-module sc
-implicit none
-
-contains
-
 subroutine source(box, s)
     use defstruct
     implicit none
@@ -33,4 +28,3 @@ subroutine source(box, s)
     s%bpot = (box%rovx*box%bz - box%rovz*box%bx)/box%ro
 end subroutine
 
-end module 

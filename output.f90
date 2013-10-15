@@ -1,8 +1,3 @@
-module op
-implicit none
-
-contains
-
 subroutine output(box)
     use defstruct
     implicit none
@@ -29,4 +24,3 @@ subroutine output(box)
 
 end subroutine
 
-end module

@@ -1,8 +1,3 @@
-module ic
-implicit none
-
-contains
-
 subroutine initial(box, uboundary)
     use defstruct
     implicit none
@@ -141,4 +136,3 @@ subroutine initial(box, uboundary)
 
 end subroutine
 
-end module

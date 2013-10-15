@@ -1,8 +1,3 @@
-module flx
-implicit none
-
-contains
-
 subroutine flux(box, fx, fz)
     use defstruct
     implicit none
@@ -74,4 +69,3 @@ subroutine flux(box, fx, fz)
 
 end subroutine
 
-end module

@@ -1,8 +1,3 @@
-module l2
-implicit none
-
-contains
-
 subroutine lw2(box, h, f, fx, fz, s)
     use defstruct
     implicit none
@@ -46,6 +41,4 @@ subroutine each2(box,h,f,fx,fz,s,ddx,ddz,dt)
     end do
 
 end subroutine 
-
-end module 
 

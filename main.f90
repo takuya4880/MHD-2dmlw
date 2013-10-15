@@ -1,16 +1,5 @@
 program main
     use defstruct   
-    use ic 
-    use bc 
-    use op 
-    use pr 
-    use dt 
-    use st 
-    use l1 
-    use l2 
-    use sc 
-    use flx 
-    use av
     implicit none
     
     type(cell),pointer :: box

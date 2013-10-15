@@ -1,8 +1,3 @@
-module av
-implicit none
-
-contains
-
 subroutine artvis(box, f)
     use defstruct
     implicit none
@@ -52,4 +47,3 @@ subroutine eachav(box,f,kapx,kapz,con)
     deallocate(difx,difz)
 end subroutine 
 
-end module 
