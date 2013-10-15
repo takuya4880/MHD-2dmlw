@@ -13,7 +13,7 @@ program main
     double precision :: uboundary(9,marg)
     double precision :: t, tint, tend, tnxt
 
-    !call omp_set_num_threads(2)
+    call omp_set_num_threads(2)
     allocate(box)
 
     box%con%nx = nx
@@ -21,8 +21,8 @@ program main
     box%con%ix = ix
     box%con%iz = iz
     box%con%marg = marg
-    box%con%wid = 150.
-    box%con%hig = 60.
+    box%con%wid = 80.
+    box%con%hig = 54.
     box%con%dx = box%con%wid/dble(box%con%nx-1)
     box%con%dz = box%con%hig/dble(box%con%nz-1)
     box%con%a = 0.4
@@ -34,7 +34,7 @@ program main
     tnxt = tint
     tend = 120.
 
-    open(23,file="result.dat",status="replace")
+    open(23,file="result_tearing.dat",status="replace")
 
     call initial(box, uboundary)
     call boundary(box, uboundary)

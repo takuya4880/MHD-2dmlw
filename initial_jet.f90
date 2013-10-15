@@ -28,7 +28,7 @@ subroutine initial(box, uboundary)
     ztr = 8.
     zfsl = -4.
     zfsu = -2.
-    zmgc = 9.5
+    zmgc = 8.
     zinv = 5.
     betafs=4.
     betacor=0.2
