@@ -15,7 +15,6 @@ program main
     
     type(cell),pointer :: box
     double precision :: uboundary(9,marg)
-    
     double precision :: t, tint, tend, tnxt
 
     allocate(box)
