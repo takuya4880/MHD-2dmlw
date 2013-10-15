@@ -32,13 +32,13 @@ program main
     t = 0.
     tint = 1.
     tnxt = tint
-    tend = 1.
+    tend = 120.
 
     open(23,file="result.dat",status="replace")
 
     call initial(box, uboundary)
     call boundary(box, uboundary)
-    !call output(box)
+    call output(box)
     call pressure(box)
 
     do
@@ -48,7 +48,7 @@ program main
         t = t + box%con%dt
         print *, t, box%con%dt
         if (t>=tnxt) then
-            !call output(box)
+            call output(box)
             tnxt = tnxt + tint
         endif
         if (t>tend) exit

@@ -43,16 +43,19 @@ subroutine eachav(box,f,kapx,kapz,con)
     ddx = con%dt / con%dx
     ddz = con%dt / con%dz
     
-    !$omp parallel workshare
+    !$omp parallel
+    !$omp workshare
     difx(2:ix,:) = f(2:ix,:) - f(1:ix-1,:)
     difz(:,2:iz) = f(:,2:iz) - f(:,1:iz-1)
-
+    !$omp end workshare
+    !$omp workshare
     box(3:ix-2,3:iz-2) = f(3:ix-2,3:iz-2) &
              + ddx * ( kapx(4:ix-1,3:iz-2)*difx(4:ix-1,3:iz-2)     &
                        - kapx(3:ix-2,3:iz-2)*difx(3:ix-2,3:iz-2) ) &
              + ddz * ( kapz(3:ix-2,4:iz-1)*difz(3:ix-2,4:iz-1)     &
                        - kapz(3:ix-2,3:iz-2)*difz(3:ix-2,3:iz-2) ) 
-    !$omp end parallel workshare
+    !$omp end workshare
+    !$omp end parallel 
     deallocate(difx,difz)
 end subroutine 
 end module 

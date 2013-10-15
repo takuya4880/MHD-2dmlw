@@ -13,8 +13,8 @@ subroutine flux(box, fx, fz)
     double precision :: jx, jy, jz
 
     !$omp parallel do private(i,roi,vx,vy,vz,bx,by,bz,pr,b2,roh,jx,jy,jz,eta,ex,ey,ez)
-    do j=1,iz
-        do i=1,ix
+    do j=2,iz-1
+        do i=2,ix-1
             roi = 1./box%ro(i,j)
             vx = box%rovx(i,j) * roi
             vy = box%rovy(i,j) * roi
