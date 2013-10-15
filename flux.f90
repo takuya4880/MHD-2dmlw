@@ -30,7 +30,7 @@ subroutine flux(box, fx, fz)
     jx(2:ix-1,2:iz-1) = -(box%by(2:ix-1,3:iz)-box%by(2:ix-1,1:iz-2))/(2.*box%con%dz)
     jy(2:ix-1,2:iz-1) = (box%bx(2:ix-1,3:iz)-box%bx(2:ix-1,1:iz-2))/(2.*box%con%dz) &
                         -(box%bz(3:ix,2:iz-1)-box%bz(1:ix-2,2:iz-1))/(2.*box%con%dx)
-    jx(2:ix-1,2:iz-1) = (box%by(3:ix,2:iz-1)-box%by(1:ix-2,2:iz-1))/(2.*box%con%dx)
+    jz(2:ix-1,2:iz-1) = (box%by(3:ix,2:iz-1)-box%by(1:ix-2,2:iz-1))/(2.*box%con%dx)
 
     eta = sqrt((jx**2+jy**2+jz**2)*16.*atan(1.0))*roi  !calculate vd
     !$omp end workshare
