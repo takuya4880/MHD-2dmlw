@@ -13,9 +13,15 @@ module defstruct
         double precision gam, q, a
         double precision gx, gy, gz 
     end type
+
+    type output
+        integer mf_params, mf_t, mf_ro, mf_pr, mf_vx
+        integer mf_vy, mf_bx, mf_by, mf_az, mf_x, mf_y
+    end type
     
     type cell
         type(constants) con
+        type(output) op
         double precision x(ix), z(iz)
         double precision ro(ix,iz), rovx(ix,iz), rovy(ix,iz), rovz(ix,iz)
         double precision bx(ix,iz), by(ix,iz), bz(ix,iz), e(ix,iz) 

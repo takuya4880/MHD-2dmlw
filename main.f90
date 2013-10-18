@@ -28,17 +28,17 @@ program main
     box%con%a = 0.4
     box%con%q = 3.
     box%con%gam = 5./3.
+    box%op%mf_params=9
 
     t = 0.
     tint = 1.
     tnxt = tint
     tend = 120.
 
-    open(23,file="result.dat",status="replace")
-
     call initial(box, uboundary)
     call boundary(box, uboundary)
-    call output(box)
+    call outpinit(box)
+    call outp(box,t)
     call pressure(box)
 
     do
@@ -48,13 +48,11 @@ program main
         t = t + box%con%dt
         print *, t, box%con%dt
         if (t>=tnxt) then
-            call output(box)
+            call outp(box,t)
             tnxt = tnxt + tint
         endif
         if (t>tend) exit
     end do
-
-    close(23)
 
 end program main
         

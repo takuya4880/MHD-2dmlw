@@ -77,11 +77,11 @@ subroutine initial(box, uboundary)
         end if
     end do
 
-    open(24,file="initial.dat",status="replace")
-    do i=1,iz
-       write (24,*) box%z(i), den(i), pre(i), temp(i), 1./beta(i), b(i), phi(i)
-    end do
-    close(24)
+    !open(24,file="initial.dat",status="replace")
+    !do i=1,iz
+    !   write (24,*) box%z(i), den(i), pre(i), temp(i), 1./beta(i), b(i), phi(i)
+    !end do
+    !close(24)
 
     box%ro = spread(den,1,ix)
     box%rovx = 0.
