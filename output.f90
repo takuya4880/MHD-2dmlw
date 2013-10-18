@@ -3,6 +3,7 @@ implicit none
 contains
 subroutine outp(box,t)
     use defstruct
+    use cansio
     implicit none
     type(cell) :: box
     double precision :: t
@@ -39,6 +40,7 @@ end subroutine
 
 subroutine outpinit(box)
     use defstruct
+    use cansio
     implicit none
     type (cell) :: box
 

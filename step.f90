@@ -3,12 +3,8 @@ implicit none
 contains
 subroutine step(box)
     use defstruct
-    use flx
-    use sc
-    use l1
+    use lw
     use pr
-    use l2
-    use av
 
     implicit none
     type(cell) :: box
