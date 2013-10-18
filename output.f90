@@ -9,17 +9,18 @@ subroutine outp(box,t)
     double precision :: t
 
     double precision :: az(ix,iz)
-    integer :: i,j
+    integer :: i,j,m
     !double precision :: v2(ix,iz), dt(ix,iz)
-    !m = box%con%marg
+    m = box%con%marg
     
-    az(1,1)=0.
-    do i=2,ix
+    az=0
+    !az(m+1,m+1)=0.
+    do i=m+2,ix-m
         az(i,1) = az(i-1,1) &
                         - 0.5*box%con%dx*(box%bz(i,1)+box%bz(i-1,1))
     end do
-    do i=1,ix
-        do j=2,iz
+    do i=m+1,ix-m
+        do j=m+2,iz-m
             az(i,j) = az(i,j-1) &
                             + 0.5*box%con%dz*(box%bx(i,j)+box%bx(i,j-1))
         end do
