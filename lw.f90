@@ -19,7 +19,6 @@ subroutine lw1(box, h, fx, fz, s)
     call each1(box%by,h%by,fx%by,fz%by,s%by,ddx,ddz,dt)
     call each1(box%bz,h%bz,fx%bz,fz%bz,s%bz,ddx,ddz,dt)
     call each1(box%e,h%e,fx%e,fz%e,s%e,ddx,ddz,dt)
-    call each1(box%bpot,h%bpot,fx%bpot,fz%bpot,s%bpot,ddx,ddz,dt)
     
     
 end subroutine
@@ -65,7 +64,6 @@ subroutine lw2(box, h, f, fx, fz, s)
     call each2(box%by,h%by,f%by,fx%by,fz%by,s%by,ddx,ddz,dt)
     call each2(box%bz,h%bz,f%bz,fx%bz,fz%bz,s%bz,ddx,ddz,dt)
     call each2(box%e,h%e,f%e,fx%e,fz%e,s%e,ddx,ddz,dt)
-    call each2(box%bpot,h%bpot,f%bpot,fx%bpot,fz%bpot,s%bpot,ddx,ddz,dt)
    
 
 end subroutine
@@ -117,7 +115,6 @@ subroutine artvis(box, f)
     call eachav(box%by, f%by, kapx, kapz, box%con)
     call eachav(box%bz, f%bz, kapx, kapz, box%con)
     call eachav(box%e, f%e, kapx, kapz, box%con)
-    call eachav(box%bpot, f%bpot, kapx, kapz, box%con)
 
     deallocate(kapx,kapz)
 
@@ -205,7 +202,6 @@ subroutine flux(box, fx, fz)
             fx%by(i,j) = -ez
             fx%bz(i,j) = ey
             fx%e(i,j) = h*vx + (ey*bz - ez*by) 
-            fx%bpot(i,j) = 0
 
             fz%ro(i,j) = box%rovz(i,j)
             fz%rovx(i,j) = vz*box%rovx(i,j) - bz*bx
@@ -215,7 +211,6 @@ subroutine flux(box, fx, fz)
             fz%by(i,j) = ex
             fz%bz(i,j) = 0.
             fz%e(i,j) = h*vz + (ex*by - ey*bx)
-            fz%bpot(i,j) = 0
         end do
     end do
     !$omp end parallel do 
@@ -252,7 +247,6 @@ subroutine source(box, s)
     s%rovz = box%ro*box%con%gz*spread(fugou,1,ix)
     s%e = box%rovx*box%con%gx + box%rovy*box%con%gy + box%rovz*box%con%gz
 
-    s%bpot = (box%rovx*box%bz - box%rovz*box%bx)/box%ro
     !$omp end parallel workshare
 end subroutine
 

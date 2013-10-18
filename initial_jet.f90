@@ -105,17 +105,6 @@ subroutine initial(box, uboundary)
             + box%pr/(box%con%gam-1.) &
             + 0.5*(box%bx**2 + box%by**2 + box%bz**2)
 
-    box%bpot(1,1)=0.
-    do i=2,ix
-        box%bpot(i,1) = box%bpot(i-1,1) &
-                        - 0.5*box%con%dx*(box%bz(i,1)+box%bz(i-1,1))
-    end do
-    do i=1,ix
-        do j=2,iz
-            box%bpot(i,j) = box%bpot(i,j-1) &
-                            + 0.5*box%con%dz*(box%bx(i,j)+box%bx(i,j-1))
-        end do
-    end do
 
     !uboundary(1,1:marg) = den(iz-marg+1:iz)
     !uboundary(2,1:marg) = box%rovx(100,iz-marg+1:iz)

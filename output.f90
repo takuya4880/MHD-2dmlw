@@ -8,9 +8,22 @@ subroutine outp(box,t)
     type(cell) :: box
     double precision :: t
 
-    !integer :: i,j,m
+    double precision :: az(ix,iz)
+    integer :: i,j
     !double precision :: v2(ix,iz), dt(ix,iz)
     !m = box%con%marg
+    
+    az(1,1)=0.
+    do i=2,ix
+        az(i,1) = az(i-1,1) &
+                        - 0.5*box%con%dx*(box%bz(i,1)+box%bz(i-1,1))
+    end do
+    do i=1,ix
+        do j=2,iz
+            az(i,j) = az(i,j-1) &
+                            + 0.5*box%con%dz*(box%bx(i,j)+box%bx(i,j-1))
+        end do
+    end do
 
     write(box%op%mf_t) t
     write(box%op%mf_ro) box%ro
@@ -19,7 +32,7 @@ subroutine outp(box,t)
     write(box%op%mf_vy) box%rovy/box%ro
     write(box%op%mf_bx) box%bx
     write(box%op%mf_by) box%by
-    write(box%op%mf_az) box%bpot
+    write(box%op%mf_az) az
 
     !do j=1,iz
     !    do i=1,ix

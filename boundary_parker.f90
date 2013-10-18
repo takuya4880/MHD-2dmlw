@@ -16,7 +16,6 @@ subroutine boundary(box, uboundary)
     call gppmbc2(box%bz, 7, uboundary)
     call gppmbc(box%e, 8, uboundary)
     call gppmbc(box%pr, 9, uboundary)
-    call bpotbc(box%bpot)
 
     !call cppmbc(box%ro, 1, uboundary)
     !call cppmbc(box%rovx, 2, uboundary)
@@ -157,17 +156,5 @@ subroutine gppmbc2(arr, k, ub)   !gradient, periodic, mirror
     end do
 end subroutine
 
-subroutine bpotbc(arr)   !side periodic boundary for magnetic potential
-    use defstruct
-    implicit none
-    double precision :: arr(ix,iz)
-
-    integer :: i
-    
-    do i=1,marg
-        arr(i,:) = arr(ix-2*marg+i,:) 
-        arr(ix-marg+i,:) = arr(marg+i,:)
-    end do
-end subroutine
 
 end module
