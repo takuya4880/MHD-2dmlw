@@ -16,7 +16,7 @@ subroutine outp(box,t)
     write(box%op%mf_ro) box%ro
     write(box%op%mf_pr) box%pr
     write(box%op%mf_vx) box%rovx/box%ro
-    write(box%op%mf_vy) box%rovy/box%ro
+    write(box%op%mf_vy) box%rovz/box%ro
     write(box%op%mf_bx) box%bx
     write(box%op%mf_by) box%by
     write(box%op%mf_az) box%bpot
