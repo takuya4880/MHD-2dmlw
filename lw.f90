@@ -233,7 +233,7 @@ subroutine source(box, s)
    
     fugou = 1.
     if (box%con%a==-1) then 
-        fugou(1:marg-1) = -1
+        fugou(1:marg-1) = -1.
         fugou(marg) = 0.
     else
         fugou(1:marg) = -1.
