@@ -53,6 +53,7 @@ program main
             tnxt = tnxt + tint
         endif
         if (t>tend) exit
+        if (box%con%dt<1.e-10) exit
     end do
 
 end program main
