@@ -11,6 +11,8 @@ subroutine outp(box,t)
     !integer :: i,j,m
     !double precision :: v2(ix,iz), dt(ix,iz)
     !m = box%con%marg
+    
+    open(box%op%mf_t,file="t.dac",form="unformatted",position="append")
 
     write(box%op%mf_t) t
     write(box%op%mf_ro) box%ro
@@ -20,6 +22,8 @@ subroutine outp(box,t)
     write(box%op%mf_bx) box%bx
     write(box%op%mf_by) box%by
     write(box%op%mf_az) box%bpot
+
+    close(box%op%mf_t)
 
     !do j=1,iz
     !    do i=1,ix
@@ -78,6 +82,7 @@ subroutine outpinit(box)
 
     close(box%op%mf_x)
     close(box%op%mf_y)
+    close(box%op%mf_params)
      
 end subroutine
 
