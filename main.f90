@@ -13,7 +13,7 @@ program main
     double precision :: uboundary(9,marg)
     double precision :: t, tint, tend, tnxt
 
-    call omp_set_num_threads(2)
+    !!call omp_set_num_threads(2)
     allocate(box)
     !open(23,file="result.dat",status="replace")
 
@@ -53,6 +53,7 @@ program main
             tnxt = tnxt + tint
         endif
         if (t>tend) exit
+        if (box%con%dt<1.e-10) exit
     end do
 
 end program main

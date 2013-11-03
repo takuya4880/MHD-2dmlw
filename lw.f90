@@ -230,16 +230,14 @@ subroutine source(box, s)
     type(cell) :: box, s
     integer :: i
     double precision :: fugou(iz)
-    
-    do i=1,iz
-        if (box%z(i)>0) then 
-            fugou = 1.
-        else if (box%z(i)<0) then
-            fugou = -1.
-        else 
-            fugou = 0.
-        end if
-    end do
+   
+    fugou = 1.
+    if (box%con%a==-1) then 
+        fugou(1:marg-1) = -1.
+        fugou(marg) = 0.
+    else
+        fugou(1:marg) = -1.
+    end if
 
     !$omp parallel workshare
     s%ro = 0.

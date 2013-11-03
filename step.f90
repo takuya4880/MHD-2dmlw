@@ -15,6 +15,7 @@ subroutine step(box)
     fz = box
     s = box
     h = box
+    h%con%a = -1.   !use a to knowtify this is half step value for source term
     f = box
         
     !forall(i=1:ix) h%x(i)=h%con%dx*(i-h%con%marg-1.)
