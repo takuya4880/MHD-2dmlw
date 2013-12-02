@@ -40,8 +40,8 @@ subroutine each1(u,h,d,fx,fz,s,dx,dz,dt)
     ddz = dt/dz
 
     d(2:ix-1,2:iz-1) = -0.5*dt*(0.5*dx*(fx(3:ix,2:iz-1)-fx(1:ix-2,2:iz-1)))&
-                       -0.5*dt*(0.5*dx*(fz(3:ix,2:iz-1)-fz(1:ix-2,2:iz-1)))&
-                       -0.5*dt*s(2:ix-1,2:iz-1)
+                       -0.5*dt*(0.5*dz*(fz(3:ix,2:iz-1)-fz(1:ix-2,2:iz-1)))&
+                       +0.5*dt*s(2:ix-1,2:iz-1)
 
     !$omp parallel do private(j,fffx,fffz,ss) 
     do i=1,iz-1
