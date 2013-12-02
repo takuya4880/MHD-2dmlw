@@ -34,7 +34,7 @@ program main
     t = 0.
     tint = 1.
     tnxt = tint
-    tend = 120.
+    tend = 110.
 
     call initial(box, uboundary)
     call boundary(box, uboundary)
