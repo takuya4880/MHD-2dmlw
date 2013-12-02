@@ -39,8 +39,8 @@ subroutine each1(u,h,d,fx,fz,s,dx,dz,dt)
     ddx = dt/dx
     ddz = dt/dz
 
-    d(2:ix-1,2:iz-1) = -0.5*dt*(0.5*dx*(fx(3:ix,2:iz-1)-fx(1:ix-2,2:iz-1)))&
-                       -0.5*dt*(0.5*dz*(fz(3:ix,2:iz-1)-fz(1:ix-2,2:iz-1)))&
+    d(2:ix-1,2:iz-1) = -0.5*ddx*(0.5*(fx(3:ix,2:iz-1)-fx(1:ix-2,2:iz-1)))&
+                       -0.5*ddz*(0.5*(fz(2:ix-1,3:iz)-fz(2:ix-1,1:iz-2)))&
                        +0.5*dt*s(2:ix-1,2:iz-1)
 
     !$omp parallel do private(j,fffx,fffz,ss) 
@@ -49,7 +49,7 @@ subroutine each1(u,h,d,fx,fz,s,dx,dz,dt)
             fffx = 0.5 * ( fx(j+1,i+1)+fx(j+1,i)-fx(j,i+1)-fx(j,i) )
             fffz = 0.5 * ( fz(j+1,i+1)-fz(j+1,i)+fz(j,i+1)-fz(j,i) )
             ss   = 0.25 * ( s(j+1,i+1) +s(j+1,i) +s(j,i+1) +s(j,i) )
-            h(j,i) = 0.25 * ( u(j+1,i+1)+u(j+1,i)+u(j,i+1)+u(j,i) ) &
+            h(j,i) = 0.25 *(u(j+1,i+1) +u(j+1,i) +u(j,i+1) +u(j,i) ) &
                         - (ddx*fffx + ddz*fffz - dt*ss)
         end do
     end do
