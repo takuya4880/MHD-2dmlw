@@ -13,7 +13,7 @@ program main
     double precision :: uboundary(9,marg)
     double precision :: t, tint, tend, tnxt
 
-    !!call omp_set_num_threads(2)
+    call omp_set_num_threads(2)
     allocate(box)
     !open(23,file="result.dat",status="replace")
 

@@ -1,38 +1,47 @@
 module lw
 implicit none 
 contains
-subroutine lw1(box, h, fx, fz, s)
+subroutine lw1(box, h, d, fx, fz, s)
     use defstruct
     implicit none
-    type(cell) :: box, h, fx, fz, s
+    type(cell) :: box, h, d, fx, fz, s
     
-    double precision :: ddx, ddz, dt
-    ddx = box%con%dt / box%con%dx
-    ddz = box%con%dt / box%con%dz
-    dt  = box%con%dt
+    double precision :: dx, dz, dt
+    dx = box%con%dx
+    dz = box%con%dz
+    dt = box%con%dt
 
-    call each1(box%ro,h%ro,fx%ro,fz%ro,s%ro,ddx,ddz,dt)
-    call each1(box%rovx,h%rovx,fx%rovx,fz%rovx,s%rovx,ddx,ddz,dt)
-    call each1(box%rovy,h%rovy,fx%rovy,fz%rovy,s%rovy,ddx,ddz,dt)
-    call each1(box%rovz,h%rovz,fx%rovz,fz%rovz,s%rovz,ddx,ddz,dt)
-    call each1(box%bx,h%bx,fx%bx,fz%bx,s%bx,ddx,ddz,dt)
-    call each1(box%by,h%by,fx%by,fz%by,s%by,ddx,ddz,dt)
-    call each1(box%bz,h%bz,fx%bz,fz%bz,s%bz,ddx,ddz,dt)
-    call each1(box%e,h%e,fx%e,fz%e,s%e,ddx,ddz,dt)
-    call each1(box%bpot,h%bpot,fx%bpot,fz%bpot,s%bpot,ddx,ddz,dt)
+    call each1(box%ro,h%ro,d%ro,fx%ro,fz%ro,s%ro,dx,dz,dt)
+    call each1(box%rovx,h%rovx,d%rovx,fx%rovx,fz%rovx,s%rovx,dx,dz,dt)
+    call each1(box%rovy,h%rovy,d%rovy,fx%rovy,fz%rovy,s%rovy,dx,dz,dt)
+    call each1(box%rovz,h%rovz,d%rovz,fx%rovz,fz%rovz,s%rovz,dx,dz,dt)
+    call each1(box%bx,h%bx,d%bx,fx%bx,fz%bx,s%bx,dx,dz,dt)
+    call each1(box%by,h%by,d%by,fx%by,fz%by,s%by,dx,dz,dt)
+    call each1(box%bz,h%bz,d%bz,fx%bz,fz%bz,s%bz,dx,dz,dt)
+    call each1(box%e,h%e,d%e,fx%e,fz%e,s%e,dx,dz,dt)
+    call each1(box%bpot,h%bpot,d%bpot,fx%bpot,fz%bpot,s%bpot,dx,dz,dt)
     
     
 end subroutine
 
-subroutine each1(u,h,fx,fz,s,ddx,ddz,dt)
+subroutine each1(u,h,d,fx,fz,s,dx,dz,dt)
     use defstruct
     !$use omp_lib
     implicit none
-    double precision :: u(ix,iz),h(ix,iz),fx(ix,iz),fz(ix,iz),s(ix,iz)
-    double precision :: ddx, ddz, dt
+    double precision :: u(ix,iz),d(ix,iz),h(ix,iz)
+    double precision :: fx(ix,iz),fz(ix,iz),s(ix,iz)
+    double precision :: dx, dz, dt
     
     integer i,j
     double precision fffx, fffz, ss
+    double precision ddx, ddz
+    
+    ddx = dt/dx
+    ddz = dt/dz
+
+    d(2:ix-1,2:iz-1) = -0.5*dt*(0.5*dx*(fx(3:ix,2:iz-1)-fx(1:ix-2,2:iz-1)))&
+                       -0.5*dt*(0.5*dx*(fz(3:ix,2:iz-1)-fz(1:ix-2,2:iz-1)))&
+                       -0.5*dt*s(2:ix-1,2:iz-1)
 
     !$omp parallel do private(j,fffx,fffz,ss) 
     do i=1,iz-1
@@ -41,64 +50,68 @@ subroutine each1(u,h,fx,fz,s,ddx,ddz,dt)
             fffz = 0.5 * ( fz(j+1,i+1)-fz(j+1,i)+fz(j,i+1)-fz(j,i) )
             ss   = 0.25 * ( s(j+1,i+1) +s(j+1,i) +s(j,i+1) +s(j,i) )
             h(j,i) = 0.25 * ( u(j+1,i+1)+u(j+1,i)+u(j,i+1)+u(j,i) ) &
-                        - 0.5*(ddx*fffx + ddz*fffz - dt*ss)
+                        - (ddx*fffx + ddz*fffz - dt*ss)
         end do
     end do
     !$omp end parallel do
 end subroutine
 
-subroutine lw2(box, h, f, fx, fz, s)
+subroutine lw2(box, d, fx, fz, s)
     use defstruct
     implicit none
-    type(cell) :: box, h, f, fx, fz, s
+    type(cell) :: box, d, fx, fz, s
     
-    double precision :: ddx, ddz, dt
-    ddx = box%con%dt / box%con%dx
-    ddz = box%con%dt / box%con%dz
+    double precision :: dx, dz, dt
+    dx = box%con%dx
+    dz = box%con%dz
     dt  = box%con%dt
 
-    call each2(box%ro,h%ro,f%ro,fx%ro,fz%ro,s%ro,ddx,ddz,dt)
-    call each2(box%rovx,h%rovx,f%rovx,fx%rovx,fz%rovx,s%rovx,ddx,ddz,dt)
-    call each2(box%rovy,h%rovy,f%rovy,fx%rovy,fz%rovy,s%rovy,ddx,ddz,dt)
-    call each2(box%rovz,h%rovz,f%rovz,fx%rovz,fz%rovz,s%rovz,ddx,ddz,dt)
-    call each2(box%bx,h%bx,f%bx,fx%bx,fz%bx,s%bx,ddx,ddz,dt)
-    call each2(box%by,h%by,f%by,fx%by,fz%by,s%by,ddx,ddz,dt)
-    call each2(box%bz,h%bz,f%bz,fx%bz,fz%bz,s%bz,ddx,ddz,dt)
-    call each2(box%e,h%e,f%e,fx%e,fz%e,s%e,ddx,ddz,dt)
-    call each2(box%bpot,h%bpot,f%bpot,fx%bpot,fz%bpot,s%bpot,ddx,ddz,dt)
+    call each2(box%ro,d%ro,fx%ro,fz%ro,s%ro,dx,dz,dt)
+    call each2(box%rovx,d%rovx,fx%rovx,fz%rovx,s%rovx,dx,dz,dt)
+    call each2(box%rovy,d%rovy,fx%rovy,fz%rovy,s%rovy,dx,dz,dt)
+    call each2(box%rovz,d%rovz,fx%rovz,fz%rovz,s%rovz,dx,dz,dt)
+    call each2(box%bx,d%bx,fx%bx,fz%bx,s%bx,dx,dz,dt)
+    call each2(box%by,d%by,fx%by,fz%by,s%by,dx,dz,dt)
+    call each2(box%bz,d%bz,fx%bz,fz%bz,s%bz,dx,dz,dt)
+    call each2(box%e,d%e,fx%e,fz%e,s%e,dx,dz,dt)
+    call each2(box%bpot,d%bpot,fx%bpot,fz%bpot,s%bpot,dx,dz,dt)
    
 
 end subroutine
 
-subroutine each2(box,h,f,fx,fz,s,ddx,ddz,dt)
+subroutine each2(box,d,fx,fz,s,dx,dz,dt)
     use defstruct
     !$use omp_lib
     implicit none
-    double precision :: box(ix,iz),f(ix,iz),h(ix,iz)
+    double precision :: box(ix,iz),d(ix,iz)
     double precision :: fx(ix,iz),fz(ix,iz),s(ix,iz)
-    double precision :: ddx, ddz, dt
+    double precision :: dx, dz, dt
     
     integer i,j
     double precision fffx,fffz,ss
+    double precision ddx, ddz
 
+    ddx = dt/dx
+    ddz = dt/dz
+    
     !$omp parallel do private(j,fffx,fffz,ss) 
     do i=1,iz-2
         do j=1,ix-2
             fffx = 0.5 * (fx(j+1,i+1)+fx(j+1,i)-fx(j,i+1)-fx(j,i))
             fffz = 0.5 * (fz(j+1,i+1)-fz(j+1,i)+fz(j,i+1)-fz(j,i))
             ss  = 0.25 * ( s(j+1,i+1) +s(j+1,i) +s(j,i+1) +s(j,i) )
-            f(j+1,i+1) = box(j+1,i+1) - ddx*fffx - ddz*fffz + dt*ss
+            d(j+1,i+1) = d(j+1,i+1) - 0.5*(ddx*fffx + ddz*fffz - dt*ss)
         end do
     end do
     !$omp end parallel do
 
 end subroutine 
 
-subroutine artvis(box, f)
+subroutine artvis(box, d)
     use defstruct
     !$use omp_lib
     implicit none
-    type(cell) :: box, f
+    type(cell) :: box, d
     double precision, allocatable :: kapx(:,:),kapz(:,:)
     allocate(kapx(ix,iz),kapz(ix,iz))
     
@@ -109,24 +122,24 @@ subroutine artvis(box, f)
                                     - box%rovz(:,1:iz-1)/box%ro(:,1:iz-1)) 
     !$omp end parallel workshare
 
-    call eachav(box%ro, f%ro, kapx, kapz, box%con)
-    call eachav(box%rovx, f%rovx, kapx, kapz, box%con)
-    call eachav(box%rovy, f%rovy, kapx, kapz, box%con)
-    call eachav(box%rovz, f%rovz, kapx, kapz, box%con)
-    call eachav(box%bx, f%bx, kapx, kapz, box%con)
-    call eachav(box%by, f%by, kapx, kapz, box%con)
-    call eachav(box%bz, f%bz, kapx, kapz, box%con)
-    call eachav(box%e, f%e, kapx, kapz, box%con)
-    call eachav(box%bpot, f%bpot, kapx, kapz, box%con)
+    call eachav(box%ro, d%ro, kapx, kapz, box%con)
+    call eachav(box%rovx, d%rovx, kapx, kapz, box%con)
+    call eachav(box%rovy, d%rovy, kapx, kapz, box%con)
+    call eachav(box%rovz, d%rovz, kapx, kapz, box%con)
+    call eachav(box%bx, d%bx, kapx, kapz, box%con)
+    call eachav(box%by, d%by, kapx, kapz, box%con)
+    call eachav(box%bz, d%bz, kapx, kapz, box%con)
+    call eachav(box%e, d%e, kapx, kapz, box%con)
+    call eachav(box%bpot, d%bpot, kapx, kapz, box%con)
 
     deallocate(kapx,kapz)
 
 end subroutine
 
-subroutine eachav(box,f,kapx,kapz,con)
+subroutine eachav(box,d,kapx,kapz,con)
     use defstruct
     !$use omp_lib
-    double precision :: box(ix,iz),f(ix,iz)
+    double precision :: box(ix,iz),d(ix,iz)
     double precision :: kapx(ix,iz),kapz(ix,iz)
     type(constants) con
     
@@ -138,11 +151,11 @@ subroutine eachav(box,f,kapx,kapz,con)
     
     !$omp parallel
     !$omp workshare
-    difx(2:ix,:) = f(2:ix,:) - f(1:ix-1,:)
-    difz(:,2:iz) = f(:,2:iz) - f(:,1:iz-1)
+    difx(2:ix,:) = box(2:ix,:) - box(1:ix-1,:)
+    difz(:,2:iz) = box(:,2:iz) - box(:,1:iz-1)
     !$omp end workshare
     !$omp workshare
-    box(3:ix-2,3:iz-2) = f(3:ix-2,3:iz-2) &
+    box(3:ix-2,3:iz-2) = box(3:ix-2,3:iz-2) + d(3:ix-2,3:iz-2) &
              + ddx * ( kapx(4:ix-1,3:iz-2)*difx(4:ix-1,3:iz-2)     &
                        - kapx(3:ix-2,3:iz-2)*difx(3:ix-2,3:iz-2) ) &
              + ddz * ( kapz(3:ix-2,4:iz-1)*difz(3:ix-2,4:iz-1)     &
