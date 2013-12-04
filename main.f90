@@ -40,12 +40,11 @@ program main
 
     call initial(box, uboundary)
     call boundary(box, uboundary)
+    call outpinit(box)
     if (mcont==1) then
         call outputread(box,t)
-    else
-        call outpinit(box)
-        call outp(box,t)
     end if 
+    call outp(box,t)
     call pressure(box)
 
     do
