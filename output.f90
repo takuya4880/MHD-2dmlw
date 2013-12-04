@@ -72,4 +72,47 @@ subroutine outpinit(box)
      
 end subroutine
 
+subroutine outputread(box,t)
+    use defstruct
+    use cansio
+    implicit none
+    type (cell) :: box
+    double precision :: t
+
+    integer :: ndi,n,nx0,ix0,jx0,mtype
+
+    ndi=1000
+
+    mfi_t=60
+    mfi_ro=70
+    mfi_pr=71
+    mfi_vx=72
+    mfi_vy=73
+    mfi_bx=74
+    mfi_by=75
+    mfi_az=76
+    
+    call dacopnr0s(box%op%mfi_t,'in/t.dac',mtype,nx0)
+    call dacopnr2s(box%op%mfi_ro,'in/ro.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_pr,'in/pr.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_vx,'in/vx.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_vy,'in/vy.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_bx,'in/bx.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_by,'in/by.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_az,'in/az.dac',mtype,ix0,jx0,nx0)
+
+    do n=1,ndi
+        read(mfi_t,end=9900) t
+        read(mfi_ro) box%ro
+        read(mfi_pr) box%pr
+        read(mfi_vx) box%vx
+        read(mfi_vy) box%vy
+        read(mfi_bx) box%bx
+        read(mfi_by) box%by
+        read(mfi_az) box%bpot
+      enddo
+9900  continue
+
+end subroutine
+
 end module 
