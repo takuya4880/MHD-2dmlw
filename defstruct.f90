@@ -17,6 +17,8 @@ module defstruct
     type output
         integer mf_params, mf_t, mf_ro, mf_pr, mf_vx
         integer mf_vy, mf_bx, mf_by, mf_az, mf_x, mf_y
+        integer mfi_t, mfi_ro, mfi_pr, mfi_vx
+        integer mfi_vy, mfi_bx, mfi_by, mfi_az
     end type
     
     type cell

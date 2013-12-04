@@ -8,15 +8,15 @@ subroutine step(box)
 
     implicit none
     type(cell) :: box
-    type(cell), pointer :: fx, fz, s, h, f
+    type(cell), pointer :: fx, fz, s, h, d
     integer :: i
-    allocate(fx, fz, s, h, f)
+    allocate(fx, fz, s, h, d)
     fx = box
     fz = box
     s = box
     h = box
     h%con%a = -1.   !use a to knowtify this is half step value for source term
-    f = box
+    d = box
         
     !forall(i=1:ix) h%x(i)=h%con%dx*(i-h%con%marg-1.)
     !forall(i=1:iz) h%z(i)=h%con%dz*(i-h%con%marg-1.)
@@ -25,17 +25,17 @@ subroutine step(box)
 
     call flux(box, fx, fz)
     call source(box, s)
-    call lw1(box, h, fx, fz, s)
+    call lw1(box, h, d, fx, fz, s)
     call pressure(h)
     
     call flux(h, fx, fz)
     call source(h, s)
-    call lw2(box, h, f, fx, fz, s)
+    call lw2(box, d, fx, fz, s)
 
-    call artvis(box, f)
+    call artvis(box, d)
     call pressure(box)
 
-    deallocate(fx, fz, s, h, f)
+    deallocate(fx, fz, s, h, d)
 
 end subroutine
 end module
