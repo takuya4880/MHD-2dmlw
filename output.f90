@@ -83,14 +83,14 @@ subroutine outputread(box,t)
 
     ndi=1000
 
-    mfi_t=60
-    mfi_ro=70
-    mfi_pr=71
-    mfi_vx=72
-    mfi_vy=73
-    mfi_bx=74
-    mfi_by=75
-    mfi_az=76
+    box%op%mfi_t=60
+    box%op%mfi_ro=70
+    box%op%mfi_pr=71
+    box%op%mfi_vx=72
+    box%op%mfi_vy=73
+    box%op%mfi_bx=74
+    box%op%mfi_by=75
+    box%op%mfi_az=76
     
     call dacopnr0s(box%op%mfi_t,'in/t.dac',mtype,nx0)
     call dacopnr2s(box%op%mfi_ro,'in/ro.dac',mtype,ix0,jx0,nx0)
@@ -102,16 +102,19 @@ subroutine outputread(box,t)
     call dacopnr2s(box%op%mfi_az,'in/az.dac',mtype,ix0,jx0,nx0)
 
     do n=1,ndi
-        read(mfi_t,end=9900) t
-        read(mfi_ro) box%ro
-        read(mfi_pr) box%pr
-        read(mfi_vx) box%vx
-        read(mfi_vy) box%vy
-        read(mfi_bx) box%bx
-        read(mfi_by) box%by
-        read(mfi_az) box%bpot
-      enddo
+        read(box%op%mfi_t,end=9900) t
+        read(box%op%mfi_ro) box%ro
+        read(box%op%mfi_pr) box%pr
+        read(box%op%mfi_vx) box%rovx
+        read(box%op%mfi_vy) box%rovz
+        read(box%op%mfi_bx) box%bx
+        read(box%op%mfi_by) box%bz
+        read(box%op%mfi_az) box%bpot
+    end do
 9900  continue
+    
+    box%rovx = box%rovx*box%ro
+    box%rovz = box%rovz*box%ro
 
 end subroutine
 

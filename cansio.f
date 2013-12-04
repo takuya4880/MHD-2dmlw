@@ -309,7 +309,7 @@ c     unlimited=-1 (dependent on how many steps calculated)
       read(idf) nx
 
       return
-      end
+      end subroutine
 
 c======================================================================|
       subroutine dacopnr2s(idf,file,mtype,ix,jx,nx)
@@ -369,7 +369,7 @@ c     unlimited=-1 (dependent on how many steps calculated)
       read(idf) ix,jx,nx
 
       return
-      end
+      end subroutine
 
 
       end module
