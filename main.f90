@@ -12,13 +12,18 @@ program main
     type(cell),pointer :: box
     double precision :: uboundary(9,marg)
     double precision :: t, tint, tend, tnxt
+    integer :: start(8), time(8), minits, timelimit
+    character*10 :: tmp
     integer :: mcont
 
     call omp_set_num_threads(2)
     allocate(box)
     !open(23,file="result.dat",status="replace")
 
+    call date_and_time(tmp,tmp,tmp,start)
+
     mcont = 0
+    timelimit = 210  ! 210:3.5 hours
     box%con%nx = nx
     box%con%nz = nz
     box%con%ix = ix
@@ -43,6 +48,7 @@ program main
     call outpinit(box)
     if (mcont==1) then
         call outputread(box,t)
+        tnxt = dint(t) + tint
     end if 
     call outp(box,t)
     call pressure(box)
@@ -59,6 +65,12 @@ program main
         endif
         if (t>tend) exit
         if (box%con%dt<1.e-10) exit
+    
+        call date_and_time(tmp,tmp,tmp,time)
+        time = time - start
+        minits = time(3)*24*60+time(5)*60+time(6)
+        if (minits>timelimit) exit
+        
     end do
 
 end program main
