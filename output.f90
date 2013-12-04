@@ -25,20 +25,6 @@ subroutine outp(box,t)
 
     close(box%op%mf_t)
 
-    !do j=1,iz
-    !    do i=1,ix
-    !        write(23, *)  box%x(i), box%z(j), box%ro(i,j), box%pr(i,j), box%rovx(i,j), box%rovz(i,j), box%bpot(i,j)
-    !    end do
-    !    write(23,*) " "
-    !end do
-    !write(23,*) " "
-
-    !i=100
-    !do j=1,iz
-    !    write(23, *)  box%z(j), box%ro(i,j), box%pr(i,j), box%rovx(i,j), box%rovz(i,j), box%bpot(i,j)
-    !end do
-    !write(23,*) " "
-    !write(23,*) " "
 
 end subroutine 
 
@@ -84,6 +70,52 @@ subroutine outpinit(box)
     close(box%op%mf_y)
     close(box%op%mf_params)
      
+end subroutine
+
+subroutine outputread(box,t)
+    use defstruct
+    use cansio
+    implicit none
+    type (cell) :: box
+    double precision :: t
+
+    integer :: ndi,n,nx0,ix0,jx0,mtype
+
+    ndi=1000
+
+    box%op%mfi_t=60
+    box%op%mfi_ro=70
+    box%op%mfi_pr=71
+    box%op%mfi_vx=72
+    box%op%mfi_vy=73
+    box%op%mfi_bx=74
+    box%op%mfi_by=75
+    box%op%mfi_az=76
+    
+    call dacopnr0s(box%op%mfi_t,'in/t.dac',mtype,nx0)
+    call dacopnr2s(box%op%mfi_ro,'in/ro.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_pr,'in/pr.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_vx,'in/vx.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_vy,'in/vy.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_bx,'in/bx.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_by,'in/by.dac',mtype,ix0,jx0,nx0)
+    call dacopnr2s(box%op%mfi_az,'in/az.dac',mtype,ix0,jx0,nx0)
+
+    do n=1,ndi
+        read(box%op%mfi_t,end=9900) t
+        read(box%op%mfi_ro) box%ro
+        read(box%op%mfi_pr) box%pr
+        read(box%op%mfi_vx) box%rovx
+        read(box%op%mfi_vy) box%rovz
+        read(box%op%mfi_bx) box%bx
+        read(box%op%mfi_by) box%bz
+        read(box%op%mfi_az) box%bpot
+    end do
+9900  continue
+    
+    box%rovx = box%rovx*box%ro
+    box%rovz = box%rovz*box%ro
+
 end subroutine
 
 end module 

@@ -12,11 +12,13 @@ program main
     type(cell),pointer :: box
     double precision :: uboundary(9,marg)
     double precision :: t, tint, tend, tnxt
+    integer :: mcont
 
-    !!call omp_set_num_threads(2)
+    call omp_set_num_threads(2)
     allocate(box)
     !open(23,file="result.dat",status="replace")
 
+    mcont = 0
     box%con%nx = nx
     box%con%nz = nz
     box%con%ix = ix
@@ -34,11 +36,14 @@ program main
     t = 0.
     tint = 1.
     tnxt = tint
-    tend = 80.
+    tend = 110.
 
     call initial(box, uboundary)
     call boundary(box, uboundary)
     call outpinit(box)
+    if (mcont==1) then
+        call outputread(box,t)
+    end if 
     call outp(box,t)
     call pressure(box)
 
